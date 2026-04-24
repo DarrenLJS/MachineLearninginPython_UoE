@@ -1,0 +1,2288 @@
+\documentclass[11pt]{article}
+
+    \usepackage[breakable]{tcolorbox}
+    \usepackage{parskip} % Stop auto-indenting (to mimic markdown behaviour)
+    
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % Keep aspect ratio if custom image width or height is specified
+    \setkeys{Gin}{keepaspectratio}
+    % Maintain compatibility with old templates. Remove in nbconvert 6.0
+    \let\Oldincludegraphics\includegraphics
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionFormat{nocaption}{}
+    \captionsetup{format=nocaption,aboveskip=0pt,belowskip=0pt}
+
+    \usepackage{float}
+    \floatplacement{figure}{H} % forces figures to be placed at the correct location
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage[margin=1in]{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+
+    \usepackage{iftex}
+    \ifPDFTeX
+        \usepackage[T1]{fontenc}
+        \IfFileExists{alphabeta.sty}{
+              \usepackage{alphabeta}
+          }{
+              \usepackage[mathletters]{ucs}
+              \usepackage[utf8x]{inputenc}
+          }
+    \else
+        \usepackage{fontspec}
+        \usepackage{unicode-math}
+    \fi
+
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics
+                         % to support a larger range
+    \makeatletter % fix for old versions of grffile with XeLaTeX
+    \@ifpackagelater{grffile}{2019/11/01}
+    {
+      % Do nothing on new versions
+    }
+    {
+      \def\Gread@@xetex#1{%
+        \IfFileExists{"\Gin@base".bb}%
+        {\Gread@eps{\Gin@base.bb}}%
+        {\Gread@@xetex@aux#1}%
+      }
+    }
+    \makeatother
+    \usepackage[Export]{adjustbox} % Used to constrain images to a maximum size
+    \adjustboxset{max size={0.9\linewidth}{0.9\paperheight}}
+
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    % The default LaTeX title has an obnoxious amount of whitespace. By default,
+    % titling removes some of it. It also provides customization options.
+    \usepackage{titling}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage{array}     % table support for pandoc >= 2.11.3
+    \usepackage{calc}      % table minipage width calculation for pandoc >= 2.11.1
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    \usepackage{soul}      % strikethrough (\st) support for pandoc >= 3.0.0
+    \usepackage{mathrsfs}
+    
+
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
+
+    % common color for the border for error outputs.
+    \definecolor{outerrorbackground}{HTML}{FFDFDF}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \makeatletter
+    \newsavebox\pandoc@box
+    \newcommand*\pandocbounded[1]{%
+      \sbox\pandoc@box{#1}%
+      % scaling factors for width and height
+      \Gscale@div\@tempa\textheight{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+      \Gscale@div\@tempb\linewidth{\wd\pandoc@box}%
+      % select the smaller of both
+      \ifdim\@tempb\p@<\@tempa\p@
+        \let\@tempa\@tempb
+      \fi
+      % scaling accordingly (\@tempa < 1)
+      \ifdim\@tempa\p@<\p@
+        \scalebox{\@tempa}{\usebox\pandoc@box}%
+      % scaling not needed, use as it is
+      \else
+        \usebox{\pandoc@box}%
+      \fi
+    }
+    \makeatother
+
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatibility definitions
+    \def\gt{>}
+    \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
+    % Document parameters
+    % Document title
+    \title{B300238\_B296110\_MachineLearninginPython\_ICA}
+    
+    
+    
+    
+    
+    
+    
+% Pygments definitions
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\@namedef{PY@tok@w}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\@namedef{PY@tok@c}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cp}{\def\PY@tc##1{\textcolor[rgb]{0.61,0.40,0.00}{##1}}}
+\@namedef{PY@tok@k}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kt}{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\@namedef{PY@tok@o}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ow}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@nb}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nf}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@nn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@ne}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.80,0.25,0.22}{##1}}}
+\@namedef{PY@tok@nv}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@no}{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\@namedef{PY@tok@nl}{\def\PY@tc##1{\textcolor[rgb]{0.46,0.46,0.00}{##1}}}
+\@namedef{PY@tok@ni}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@na}{\def\PY@tc##1{\textcolor[rgb]{0.41,0.47,0.13}{##1}}}
+\@namedef{PY@tok@nt}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@nd}{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\@namedef{PY@tok@s}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sd}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@si}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@se}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.36,0.12}{##1}}}
+\@namedef{PY@tok@sr}{\def\PY@tc##1{\textcolor[rgb]{0.64,0.35,0.47}{##1}}}
+\@namedef{PY@tok@ss}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sx}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@m}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@gh}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gu}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\@namedef{PY@tok@gd}{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\@namedef{PY@tok@gi}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.52,0.00}{##1}}}
+\@namedef{PY@tok@gr}{\def\PY@tc##1{\textcolor[rgb]{0.89,0.00,0.00}{##1}}}
+\@namedef{PY@tok@ge}{\let\PY@it=\textit}
+\@namedef{PY@tok@gs}{\let\PY@bf=\textbf}
+\@namedef{PY@tok@ges}{\let\PY@bf=\textbf\let\PY@it=\textit}
+\@namedef{PY@tok@gp}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\@namedef{PY@tok@go}{\def\PY@tc##1{\textcolor[rgb]{0.44,0.44,0.44}{##1}}}
+\@namedef{PY@tok@gt}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\@namedef{PY@tok@err}{\def\PY@bc##1{{\setlength{\fboxsep}{\string -\fboxrule}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}}
+\@namedef{PY@tok@kc}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kd}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kn}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@kr}{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@bp}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\@namedef{PY@tok@fm}{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\@namedef{PY@tok@vc}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vg}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vi}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@vm}{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\@namedef{PY@tok@sa}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sb}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sc}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@dl}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s2}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@sh}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@s1}{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\@namedef{PY@tok@mb}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mf}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mh}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mi}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@il}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@mo}{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\@namedef{PY@tok@ch}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cm}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cpf}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@c1}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+\@namedef{PY@tok@cs}{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.24,0.48,0.48}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % For linebreaks inside Verbatim environment from package fancyvrb.
+    \makeatletter
+        \newbox\Wrappedcontinuationbox
+        \newbox\Wrappedvisiblespacebox
+        \newcommand*\Wrappedvisiblespace {\textcolor{red}{\textvisiblespace}}
+        \newcommand*\Wrappedcontinuationsymbol {\textcolor{red}{\llap{\tiny$\m@th\hookrightarrow$}}}
+        \newcommand*\Wrappedcontinuationindent {3ex }
+        \newcommand*\Wrappedafterbreak {\kern\Wrappedcontinuationindent\copy\Wrappedcontinuationbox}
+        % Take advantage of the already applied Pygments mark-up to insert
+        % potential linebreaks for TeX processing.
+        %        {, <, #, %, $, ' and ": go to next line.
+        %        _, }, ^, &, >, - and ~: stay at end of broken line.
+        % Use of \textquotesingle for straight quote.
+        \newcommand*\Wrappedbreaksatspecials {%
+            \def\PYGZus{\discretionary{\char`\_}{\Wrappedafterbreak}{\char`\_}}%
+            \def\PYGZob{\discretionary{}{\Wrappedafterbreak\char`\{}{\char`\{}}%
+            \def\PYGZcb{\discretionary{\char`\}}{\Wrappedafterbreak}{\char`\}}}%
+            \def\PYGZca{\discretionary{\char`\^}{\Wrappedafterbreak}{\char`\^}}%
+            \def\PYGZam{\discretionary{\char`\&}{\Wrappedafterbreak}{\char`\&}}%
+            \def\PYGZlt{\discretionary{}{\Wrappedafterbreak\char`\<}{\char`\<}}%
+            \def\PYGZgt{\discretionary{\char`\>}{\Wrappedafterbreak}{\char`\>}}%
+            \def\PYGZsh{\discretionary{}{\Wrappedafterbreak\char`\#}{\char`\#}}%
+            \def\PYGZpc{\discretionary{}{\Wrappedafterbreak\char`\%}{\char`\%}}%
+            \def\PYGZdl{\discretionary{}{\Wrappedafterbreak\char`\$}{\char`\$}}%
+            \def\PYGZhy{\discretionary{\char`\-}{\Wrappedafterbreak}{\char`\-}}%
+            \def\PYGZsq{\discretionary{}{\Wrappedafterbreak\textquotesingle}{\textquotesingle}}%
+            \def\PYGZdq{\discretionary{}{\Wrappedafterbreak\char`\"}{\char`\"}}%
+            \def\PYGZti{\discretionary{\char`\~}{\Wrappedafterbreak}{\char`\~}}%
+        }
+        % Some characters . , ; ? ! / are not pygmentized.
+        % This macro makes them "active" and they will insert potential linebreaks
+        \newcommand*\Wrappedbreaksatpunct {%
+            \lccode`\~`\.\lowercase{\def~}{\discretionary{\hbox{\char`\.}}{\Wrappedafterbreak}{\hbox{\char`\.}}}%
+            \lccode`\~`\,\lowercase{\def~}{\discretionary{\hbox{\char`\,}}{\Wrappedafterbreak}{\hbox{\char`\,}}}%
+            \lccode`\~`\;\lowercase{\def~}{\discretionary{\hbox{\char`\;}}{\Wrappedafterbreak}{\hbox{\char`\;}}}%
+            \lccode`\~`\:\lowercase{\def~}{\discretionary{\hbox{\char`\:}}{\Wrappedafterbreak}{\hbox{\char`\:}}}%
+            \lccode`\~`\?\lowercase{\def~}{\discretionary{\hbox{\char`\?}}{\Wrappedafterbreak}{\hbox{\char`\?}}}%
+            \lccode`\~`\!\lowercase{\def~}{\discretionary{\hbox{\char`\!}}{\Wrappedafterbreak}{\hbox{\char`\!}}}%
+            \lccode`\~`\/\lowercase{\def~}{\discretionary{\hbox{\char`\/}}{\Wrappedafterbreak}{\hbox{\char`\/}}}%
+            \catcode`\.\active
+            \catcode`\,\active
+            \catcode`\;\active
+            \catcode`\:\active
+            \catcode`\?\active
+            \catcode`\!\active
+            \catcode`\/\active
+            \lccode`\~`\~
+        }
+    \makeatother
+
+    \let\OriginalVerbatim=\Verbatim
+    \makeatletter
+    \renewcommand{\Verbatim}[1][1]{%
+        %\parskip\z@skip
+        \sbox\Wrappedcontinuationbox {\Wrappedcontinuationsymbol}%
+        \sbox\Wrappedvisiblespacebox {\FV@SetupFont\Wrappedvisiblespace}%
+        \def\FancyVerbFormatLine ##1{\hsize\linewidth
+            \vtop{\raggedright\hyphenpenalty\z@\exhyphenpenalty\z@
+                \doublehyphendemerits\z@\finalhyphendemerits\z@
+                \strut ##1\strut}%
+        }%
+        % If the linebreak is at a space, the latter will be displayed as visible
+        % space at end of first line, and a continuation symbol starts next line.
+        % Stretch/shrink are however usually zero for typewriter font.
+        \def\FV@Space {%
+            \nobreak\hskip\z@ plus\fontdimen3\font minus\fontdimen4\font
+            \discretionary{\copy\Wrappedvisiblespacebox}{\Wrappedafterbreak}
+            {\kern\fontdimen2\font}%
+        }%
+
+        % Allow breaks at special characters using \PYG... macros.
+        \Wrappedbreaksatspecials
+        % Breaks at punctuation characters . , ; ? ! and / need catcode=\active
+        \OriginalVerbatim[#1,codes*=\Wrappedbreaksatpunct]%
+    }
+    \makeatother
+
+    % Exact colors from NB
+    \definecolor{incolor}{HTML}{303F9F}
+    \definecolor{outcolor}{HTML}{D84315}
+    \definecolor{cellborder}{HTML}{CFCFCF}
+    \definecolor{cellbackground}{HTML}{F7F7F7}
+
+    % prompt
+    \makeatletter
+    \newcommand{\boxspacing}{\kern\kvtcb@left@rule\kern\kvtcb@boxsep}
+    \makeatother
+    \newcommand{\prompt}[4]{
+        {\ttfamily\llap{{\color{#2}[#3]:\hspace{3pt}#4}}\vspace{-\baselineskip}}
+    }
+    
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+\usepackage{fontsize}
+\changefontsize{9pt}
+\begin{document}
+    
+    \maketitle
+    
+    
+
+    \setcounter{secnumdepth}{0}
+    \hypertarget{machine-learning-in-python---project}{%
+\section{Machine Learning in Python -
+Project}\label{machine-learning-in-python---project}}
+
+Due Friday, Apr 10th by 4 pm.
+
+\textbf{B300238} Darren Lim, \textbf{B296110} Ming Cen
+
+    \hypertarget{setup}{%
+\subsection{Setup}\label{setup}}
+
+All libraries are imported below. A single \texttt{RANDOM\_STATE}
+constant ensures reproducibility throughout. The scikit-learn library
+{[}1{]} is used for all preprocessing, modelling, and evaluation
+components.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{1}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Core data libraries}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{pandas}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{pd}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{numpy}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{np}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{plt}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{patches}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{mpatches}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{seaborn}\PY{+w}{ }\PY{k}{as}\PY{+w}{ }\PY{n+nn}{sns}
+
+\PY{c+c1}{\PYZsh{} sklearn: data splitting \PYZam{} pipelines}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{model\PYZus{}selection}\PY{+w}{ }\PY{k+kn}{import} \PY{p}{(}
+    \PY{n}{train\PYZus{}test\PYZus{}split}\PY{p}{,} \PY{n}{GridSearchCV}\PY{p}{,} \PY{n}{StratifiedKFold}\PY{p}{,} \PY{n}{cross\PYZus{}val\PYZus{}score}
+\PY{p}{)}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{pipeline}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{Pipeline}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{compose}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{ColumnTransformer}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{impute}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{SimpleImputer}
+
+\PY{c+c1}{\PYZsh{} sklearn: preprocessing}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{preprocessing}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{StandardScaler}\PY{p}{,} \PY{n}{OrdinalEncoder}\PY{p}{,} \PY{n}{OneHotEncoder}
+
+\PY{c+c1}{\PYZsh{} sklearn: models}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{linear\PYZus{}model}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{LogisticRegression}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{ensemble}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{RandomForestClassifier}
+
+\PY{c+c1}{\PYZsh{} sklearn: evaluation}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics}\PY{+w}{ }\PY{k+kn}{import} \PY{p}{(}
+    \PY{n}{roc\PYZus{}auc\PYZus{}score}\PY{p}{,} \PY{n}{average\PYZus{}precision\PYZus{}score}\PY{p}{,} \PY{n}{accuracy\PYZus{}score}\PY{p}{,} \PY{n}{f1\PYZus{}score}\PY{p}{,}
+    \PY{n}{RocCurveDisplay}\PY{p}{,} \PY{n}{PrecisionRecallDisplay}\PY{p}{,} \PY{n}{ConfusionMatrixDisplay}
+\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} UMAP (class\PYZhy{}separability diagnostic)}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{umap}
+
+\PY{c+c1}{\PYZsh{} Ignore INFO, WARNING, ERROR logs}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{os}
+\PY{n}{os}\PY{o}{.}\PY{n}{environ}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TF\PYZus{}CPP\PYZus{}MIN\PYZus{}LOG\PYZus{}LEVEL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{3}\PY{l+s+s1}{\PYZsq{}}
+\PY{k+kn}{import}\PY{+w}{ }\PY{n+nn}{warnings}
+\PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ignore}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Global constants}
+\PY{n}{RANDOM\PYZus{}STATE} \PY{o}{=} \PY{l+m+mi}{11205} \PY{c+c1}{\PYZsh{} fixed seed for all stochastic operations}
+\PY{n}{FEAT\PYZus{}MISS\PYZus{}THRESH} \PY{o}{=} \PY{l+m+mf}{0.40} \PY{c+c1}{\PYZsh{} drop features with \PYZgt{}40\PYZpc{} missing}
+\PY{n}{ROW\PYZus{}MISS\PYZus{}THRESH} \PY{o}{=} \PY{l+m+mf}{0.20} \PY{c+c1}{\PYZsh{} drop rows with \PYZgt{}20\PYZpc{} missing}
+\PY{n}{CORR\PYZus{}THRESH} \PY{o}{=} \PY{l+m+mf}{0.005} \PY{c+c1}{\PYZsh{} minimum |Pearson r| to retain a feature}
+
+\PY{c+c1}{\PYZsh{} Plot aesthetics}
+\PY{n}{plt}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{figure.dpi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{100}
+\PY{n}{sns}\PY{o}{.}\PY{n}{set\PYZus{}theme}\PY{p}{(}\PY{n}{style}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{whitegrid}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{palette}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{muted}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{BLUE} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}5B9BD5}\PY{l+s+s1}{\PYZsq{}}
+\PY{n}{ORANGE} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}ED7D31}\PY{l+s+s1}{\PYZsq{}}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Setup complete.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+2026-04-04 00:06:57.687554: I external/local\_xla/xla/tsl/cuda/cudart\_stub.cc:31]
+Could not find cuda drivers on your machine, GPU will not be used.
+2026-04-04 00:06:57.711353: I tensorflow/core/util/port.cc:153] oneDNN custom
+operations are on. You may see slightly different numerical results due to
+floating-point round-off errors from different computation orders. To turn them
+off, set the environment variable `TF\_ENABLE\_ONEDNN\_OPTS=0`.
+2026-04-04 00:06:58.493389: I tensorflow/core/platform/cpu\_feature\_guard.cc:210]
+This TensorFlow binary is optimized to use available CPU instructions in
+performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512\_VNNI AVX512\_BF16 FMA,
+in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2026-04-04 00:07:00.782980: I tensorflow/core/util/port.cc:153] oneDNN custom
+operations are on. You may see slightly different numerical results due to
+floating-point round-off errors from different computation orders. To turn them
+off, set the environment variable `TF\_ENABLE\_ONEDNN\_OPTS=0`.
+2026-04-04 00:07:00.787959: I external/local\_xla/xla/tsl/cuda/cudart\_stub.cc:31]
+Could not find cuda drivers on your machine, GPU will not be used.
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Setup complete.
+    \end{Verbatim}
+
+    \hypertarget{introduction}{%
+\section{1. Introduction}\label{introduction}}
+
+Mental health in children is a pressing global public health priority.
+Depression in early life impairs educational attainment, social
+development, and long-term economic productivity, and these effects are
+disproportionately concentrated in low- and middle-income countries
+(LMICs) where access to screening, diagnosis, and treatment remains
+severely constrained {[}2{]}.
+
+This report presents a binary classification analysis of childhood
+depressive symptoms using the UNICEF Multiple Indicator Cluster Survey
+(MICS) conducted in Malawi in 2019--2020 {[}3,4{]}. The dataset
+integrates information from three linked questionnaires (child-level,
+maternal, and household) yielding a rich, multi-domain feature set of
+\textbf{82 candidate predictors} spanning child demographics, labour
+participation, discipline practices, maternal well-being, household
+infrastructure, and socioeconomic status. After feature engineering
+(four domain-motivated composite features added) and removal of one
+high-missingness variable, \textbf{85 features} are retained for
+modelling. After removing records with missing or non-valid responses on
+the target variable, 13,036 observations are available for analysis.
+
+\textbf{Target variable:} The survey item \emph{``How often does the
+child seem very sad or depressed?''} (FCF26) yields five ordered
+response categories: \emph{never}, \emph{a few times a year},
+\emph{monthly}, \emph{weekly}, and \emph{daily}. To facilitate binary
+discrimination between no depression and any form of depression, these
+are binarised: \emph{never} is coded as \textbf{no depression} (0) and
+all other responses as \textbf{depression} (1). It is acknowledged that
+this collapses meaningful severity gradations into a single positive
+class. This yields a near-balanced binary outcome, with approximately
+54.7\% of children classified as depressed. The heterogeneity of the
+depressed class, ranging from mild episodic sadness to daily chronic
+depression, is noted as a methodological limitation.
+
+\textbf{Analytical approach:} The analysis proceeds in three stages.
+Firstly, exploratory data analysis (EDA) and feature engineering are
+used to assess data quality, visualise key predictor--outcome
+relationships, and construct a principled, leakage-free preprocessing
+pipeline incorporating ordinal and nominal encoding, imputation,
+standardisation, and correlation-based feature selection. Secondly, a
+\textbf{Logistic Regression} baseline and a tuned \textbf{Random Forest}
+classifier are fit, with hyperparameters selected exclusively via
+cross-validation on the training set and final performance evaluated on
+a held-out test set. Thirdly, feature importances and model coefficients
+are interpreted in terms of their real-world significance, and the
+findings are translated into policy-relevant recommendations.
+
+The analysis finds that the two models achieve modest but genuine
+discriminative ability (test ROC-AUC \textasciitilde{} 0.63--0.64),
+consistent with the inherently multidetermined and weakly separable
+nature of the outcome. Household socioeconomic status, maternal
+well-being, and exposure to harsh discipline emerge as the most
+consistent predictors across both models, suggesting clear targets for
+preventive intervention.
+
+    \hypertarget{exploratory-data-analysis-and-feature-engineering}{%
+\section{2. Exploratory Data Analysis and Feature
+Engineering}\label{exploratory-data-analysis-and-feature-engineering}}
+
+    \hypertarget{data-loading-and-target-construction}{%
+\subsection{2.1 Data Loading and Target
+Construction}\label{data-loading-and-target-construction}}
+
+The raw dataset is loaded and the working sample is constructed by
+removing the 126 records (\textless1\% of the total) where the target
+variable FCF26 is either missing or carries the value `NO RESPONSE'.
+Four cluster-identifier columns (HH1, HH2, LN, FS4) that carry no
+predictive signal are also dropped, along with the original FCF26 column
+after the binary target has been created. Two Boolean indicator columns
+(CL2, CL12) are converted to integers for downstream compatibility with
+sklearn.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{2}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Load raw data}
+\PY{n}{df\PYZus{}raw} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{read\PYZus{}csv}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{unicef\PYZus{}malawi.csv}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Raw dataset shape: }\PY{l+s+si}{\PYZob{}}\PY{n}{df\PYZus{}raw}\PY{o}{.}\PY{n}{shape}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Target binarisation}
+\PY{c+c1}{\PYZsh{} FCF26 scale: NEVER / A FEW TIMES A YEAR / MONTHLY / WEEKLY / DAILY}
+\PY{c+c1}{\PYZsh{} Binarisation: NEVER = 0 (no depression), all others = 1 (depression)}
+\PY{n}{df} \PY{o}{=} \PY{n}{df\PYZus{}raw}\PY{p}{[}\PY{n}{df\PYZus{}raw}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FCF26}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{notna}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZam{}} \PY{p}{(}\PY{n}{df\PYZus{}raw}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FCF26}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{!=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NO RESPONSE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FCF26}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{!=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NEVER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Drop identifiers and original target}
+\PY{n}{ID\PYZus{}COLS} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HH1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HH2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LN}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FS4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FCF26}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{df}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{n}{ID\PYZus{}COLS}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Convert boolean columns stored as objects}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Working dataset shape: }\PY{l+s+si}{\PYZob{}}\PY{n}{df}\PY{o}{.}\PY{n}{shape}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Target distribution (training sample):}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+m+mi}{0}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{No Depression (0)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Depression (1)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Depression prevalence: }\PY{l+s+si}{\PYZob{}}\PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.1\PYZpc{}}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Raw dataset shape: (13162, 87)
+Working dataset shape: (13036, 83)
+
+Target distribution (training sample):
+depression
+Depression (1)       7131
+No Depression (0)    5905
+Name: count, dtype: int64
+
+Depression prevalence: 54.7\%
+    \end{Verbatim}
+
+    \hypertarget{train-test-split}{%
+\subsection{2.2 Train / Test Split}\label{train-test-split}}
+
+The dataset is partitioned into training (85\%) and test (15\%) subsets
+using stratified sampling to preserve class proportions across both
+partitions. This split is performed before any EDA, feature engineering,
+or preprocessing, ensuring that no information from the test set
+influences any modelling decision. All EDA, feature engineering
+decisions, and preprocessing parameters are derived from the training
+set only. The test set is kept entirely unseen until final model
+evaluation. Hyperparameter selection for both models is performed
+exclusively via five-fold stratified cross-validation on the training
+set.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{3}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Stratified 85 / 15 split}
+\PY{n}{X} \PY{o}{=} \PY{n}{df}\PY{o}{.}\PY{n}{drop}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{y} \PY{o}{=} \PY{n}{df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+
+\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{X\PYZus{}test}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{train\PYZus{}test\PYZus{}split}\PY{p}{(}
+    \PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{test\PYZus{}size}\PY{o}{=}\PY{l+m+mf}{0.15}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{n}{RANDOM\PYZus{}STATE}\PY{p}{,} \PY{n}{stratify}\PY{o}{=}\PY{n}{y}
+\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Training set: }\PY{l+s+si}{\PYZob{}}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{l+s+si}{:}\PY{l+s+s2}{,}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ rows | }\PY{l+s+si}{\PYZob{}}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.1\PYZpc{}}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ depressed}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Test set:     }\PY{l+s+si}{\PYZob{}}\PY{n}{X\PYZus{}test}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{l+s+si}{:}\PY{l+s+s2}{,}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ rows | }\PY{l+s+si}{\PYZob{}}\PY{n}{y\PYZus{}test}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.1\PYZpc{}}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ depressed}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Keep a copy of raw training data aligned with y for EDA plots}
+\PY{n}{train\PYZus{}eda} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+\PY{n}{train\PYZus{}eda\PYZus{}raw} \PY{o}{=} \PY{n}{df\PYZus{}raw}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{index}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}  \PY{c+c1}{\PYZsh{} for original FCF26 counts}
+\PY{n}{train\PYZus{}eda}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{values}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Training set: 11,080 rows | 54.7\% depressed
+Test set:     1,956 rows | 54.7\% depressed
+    \end{Verbatim}
+
+    \hypertarget{target-variable-distribution}{%
+\subsection{2.3 Target Variable
+Distribution}\label{target-variable-distribution}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{4}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Figure 1: Target distribution}
+\PY{n}{fig}\PY{p}{,} \PY{n}{axes} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{13}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Panel A — binarised target}
+\PY{n}{ax} \PY{o}{=} \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n}{counts} \PY{o}{=} \PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+m+mi}{0}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{No Depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}\PY{o}{.}\PY{n}{sort\PYZus{}index}\PY{p}{(}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{bar}\PY{p}{(}\PY{n}{counts}\PY{o}{.}\PY{n}{index}\PY{p}{,} \PY{n}{counts}\PY{o}{.}\PY{n}{values}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{p}{[}\PY{n}{BLUE}\PY{p}{,} \PY{n}{ORANGE}\PY{p}{]}\PY{p}{,} \PY{n}{edgecolor}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{white}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{width}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(A) Binarised Target Distribution (Training Set)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xticks}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xticklabels}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{No Depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+\PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{v} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{counts}\PY{o}{.}\PY{n}{values}\PY{p}{)}\PY{p}{:}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{text}\PY{p}{(}\PY{n}{i}\PY{p}{,} \PY{n}{v} \PY{o}{+} \PY{l+m+mi}{80}\PY{p}{,} \PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{v}\PY{l+s+si}{:}\PY{l+s+s1}{,}\PY{l+s+si}{\PYZcb{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{(}\PY{l+s+si}{\PYZob{}}\PY{n}{v}\PY{o}{/}\PY{n+nb}{len}\PY{p}{(}\PY{n}{y\PYZus{}train}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s1}{.1\PYZpc{}}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{ha}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{center}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylim}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{counts}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)} \PY{o}{*} \PY{l+m+mf}{1.25}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Panel B — original five\PYZhy{}level frequency}
+\PY{n}{ax} \PY{o}{=} \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{order} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NEVER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A FEW TIMES A YEAR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{MONTHLY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WEEKLY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DAILY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{fcf\PYZus{}train} \PY{o}{=} \PY{n}{train\PYZus{}eda\PYZus{}raw}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FCF26}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{reindex}\PY{p}{(}\PY{n}{order}\PY{p}{)}\PY{o}{.}\PY{n}{dropna}\PY{p}{(}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{barh}\PY{p}{(}\PY{n}{fcf\PYZus{}train}\PY{o}{.}\PY{n}{index}\PY{p}{,} \PY{n}{fcf\PYZus{}train}\PY{o}{.}\PY{n}{values}\PY{p}{,}
+        \PY{n}{color}\PY{o}{=}\PY{n}{sns}\PY{o}{.}\PY{n}{color\PYZus{}palette}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Blues\PYZus{}d}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{fcf\PYZus{}train}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{edgecolor}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{white}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(B) Original Five\PYZhy{}Level Depression Frequency (Training Set)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Count}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{v} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{fcf\PYZus{}train}\PY{o}{.}\PY{n}{values}\PY{p}{)}\PY{p}{:}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{text}\PY{p}{(}\PY{n}{v} \PY{o}{+} \PY{l+m+mi}{20}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{n+nb}{str}\PY{p}{(}\PY{n+nb}{int}\PY{p}{(}\PY{n}{v}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{va}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{center}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{9}\PY{p}{)}
+
+\PY{n}{fig}\PY{o}{.}\PY{n}{suptitle}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Figure 1: Target Variable Distribution}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+              \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{B300238_B296110_MachineLearninginPython_ICA_files/B300238_B296110_MachineLearninginPython_ICA_11_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \textbf{Figure 1.} Target variable distributions in the training set.
+\textbf{(A)} Binarised outcome: the dataset is near-balanced, with
+54.7\% of children classified as depressed and 45.3\% as not depressed.
+\textbf{(B)} Original five-level response distribution: the majority of
+children report sadness only \emph{a few times a year}, while daily
+depression is the least common category.
+
+    \hypertarget{non-substantive-value-recoding}{%
+\subsection{2.4 Non-Substantive Value
+Recoding}\label{non-substantive-value-recoding}}
+
+Survey questionnaires routinely produce response codes that denote
+refusal, ignorance, or inapplicability, with values such as ``DK''
+(don't know), ``NOT ASKED'', or ``REFUSED''. These carry no substantive
+information, and are replaced with \texttt{NaN} before any further
+processing.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{5}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Replace non\PYZhy{}substantive strings with NaN}
+\PY{n}{NON\PYZus{}SUBSTANTIVE} \PY{o}{=} \PY{p}{[}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{NO RESPONSE}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DK}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DON}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{T KNOW}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DONT KNOW}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{DK / NO OPINION}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{MISSING}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{NOT ASKED}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{REFUSED}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{NO ANSWER}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{UNKNOWN}\PY{l+s+s2}{\PYZdq{}}
+\PY{p}{]}
+
+\PY{n}{total\PYZus{}replaced} \PY{o}{=} \PY{l+m+mi}{0}
+\PY{k}{for} \PY{n}{split} \PY{o+ow}{in} \PY{p}{[}\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{X\PYZus{}test}\PY{p}{]}\PY{p}{:}
+    \PY{n}{before} \PY{o}{=} \PY{p}{(}\PY{n}{split}\PY{o}{.}\PY{n}{isin}\PY{p}{(}\PY{n}{NON\PYZus{}SUBSTANTIVE}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+    \PY{n}{split}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{n}{NON\PYZus{}SUBSTANTIVE}\PY{p}{,} \PY{n}{np}\PY{o}{.}\PY{n}{nan}\PY{p}{,} \PY{n}{inplace}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+    \PY{n}{total\PYZus{}replaced} \PY{o}{+}\PY{o}{=} \PY{n}{before}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Total non\PYZhy{}substantive values recoded to NaN: }\PY{l+s+si}{\PYZob{}}\PY{n}{total\PYZus{}replaced}\PY{l+s+si}{:}\PY{l+s+s2}{,}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Total non-substantive values recoded to NaN: 2,050
+    \end{Verbatim}
+
+    \hypertarget{numeric-type-coercion}{%
+\subsection{2.5 Numeric Type Coercion}\label{numeric-type-coercion}}
+
+Four variables (CL13, MA2, LS2, WS4) were imported as string objects,
+despite containing numeric information. These columns are coerced to
+float, and any residual non-numeric strings are silently converted to
+\texttt{NaN} via
+\texttt{errors=\textquotesingle{}coerce\textquotesingle{}}.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{6}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Coerce string\PYZhy{}encoded numeric columns}
+\PY{n}{NUMERIC\PYZus{}COERCE\PYZus{}COLS} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL13}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{MA2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LS2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WS4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+
+\PY{n}{num\PYZus{}before} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{select\PYZus{}dtypes}\PY{p}{(}\PY{n}{include}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{number}\PY{p}{)}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{k}{for} \PY{n}{col} \PY{o+ow}{in} \PY{n}{NUMERIC\PYZus{}COERCE\PYZus{}COLS}\PY{p}{:}
+    \PY{k}{for} \PY{n}{split} \PY{o+ow}{in} \PY{p}{[}\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{X\PYZus{}test}\PY{p}{]}\PY{p}{:}
+        \PY{k}{if} \PY{n}{col} \PY{o+ow}{in} \PY{n}{split}\PY{o}{.}\PY{n}{columns}\PY{p}{:}
+            \PY{n}{split}\PY{p}{[}\PY{n}{col}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{to\PYZus{}numeric}\PY{p}{(}\PY{n}{split}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{p}{,} \PY{n}{errors}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{coerce}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{num\PYZus{}after} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{select\PYZus{}dtypes}\PY{p}{(}\PY{n}{include}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{number}\PY{p}{)}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Numeric columns before coercion: }\PY{l+s+si}{\PYZob{}}\PY{n}{num\PYZus{}before}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Numeric columns after coercion:  }\PY{l+s+si}{\PYZob{}}\PY{n}{num\PYZus{}after}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{  (+}\PY{l+s+si}{\PYZob{}}\PY{n}{num\PYZus{}after}\PY{+w}{ }\PY{o}{\PYZhy{}}\PY{+w}{ }\PY{n}{num\PYZus{}before}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ converted)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Numeric columns before coercion: 8
+Numeric columns after coercion:  12  (+4 converted)
+    \end{Verbatim}
+
+    \hypertarget{derived-feature-engineering}{%
+\subsection{2.6 Derived Feature
+Engineering}\label{derived-feature-engineering}}
+
+Four new features are constructed from the raw variables before any
+columns are dropped, ensuring that information from high-missingness
+variables (particularly CL3, child labour hours) is retained in derived
+form. Each feature captures a domain-theoretic construct not directly
+observable in the raw survey items.
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{total\_children} is constructed from \texttt{CSURV\ +\ CDEAD}
+  to capture cumulative family burden, including bereavement.
+\item
+  \texttt{child\_labour\_flag} is constructed from
+  \texttt{1\ if\ CL3\ \textgreater{}\ 0,\ else\ 0}, a binary indicator
+  of any labour participation, to preserve the key qualitative signal
+  from CL3 before it is dropped due to high missingness.
+\item
+  \texttt{wealth\_age} is constructed from \texttt{wscore\ x\ CB3},
+  wealth x age interaction term. Poverty effects on mental health
+  compound with developmental stage {[}2{]}.
+\item
+  \texttt{discipline\_score} is constructed from count of harsh methods
+  among FCD2D, FCD2E, and FCD2F, motivated by dose-response evidence for
+  physical discipline and internalising symptoms {[}5{]}.
+\end{itemize}
+
+These features are applied identically to all three data partitions.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{7}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Construct derived features (applied before column drop)}
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{add\PYZus{}derived\PYZus{}features}\PY{p}{(}\PY{n}{df\PYZus{}part}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Add four domain\PYZhy{}driven engineered features to a data partition.\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{n}{df\PYZus{}part} \PY{o}{=} \PY{n}{df\PYZus{}part}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} 1. Total family burden: surviving + deceased children}
+    \PY{n}{df\PYZus{}part}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{total\PYZus{}children}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}
+        \PY{n}{df\PYZus{}part}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CSURV}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)} \PY{o}{+} \PY{n}{df\PYZus{}part}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CDEAD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+    \PY{p}{)}
+    \PY{c+c1}{\PYZsh{} 2. Child labour indicator — derived before CL3 is dropped}
+    \PY{n}{df\PYZus{}part}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{child\PYZus{}labour\PYZus{}flag}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{p}{(}
+        \PY{n}{df\PYZus{}part}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}
+    \PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} 3. Wealth × Age interaction}
+    \PY{n}{df\PYZus{}part}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{wealth\PYZus{}age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}part}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{wscore}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{*} \PY{n}{df\PYZus{}part}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CB3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+    \PY{c+c1}{\PYZsh{} 4. Harsh discipline composite (count of YES responses across 3 items)}
+    \PY{n}{harsh\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FCD2D}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FCD2E}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FCD2F}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+    \PY{n}{score} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{Series}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{n}{df\PYZus{}part}\PY{o}{.}\PY{n}{index}\PY{p}{)}
+    \PY{k}{for} \PY{n}{col} \PY{o+ow}{in} \PY{n}{harsh\PYZus{}cols}\PY{p}{:}
+        \PY{k}{if} \PY{n}{col} \PY{o+ow}{in} \PY{n}{df\PYZus{}part}\PY{o}{.}\PY{n}{columns}\PY{p}{:}
+            \PY{n}{score} \PY{o}{+}\PY{o}{=} \PY{p}{(}
+                \PY{n}{df\PYZus{}part}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{str}\PY{p}{)}\PY{o}{.}\PY{n}{str}\PY{o}{.}\PY{n}{upper}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{str}\PY{o}{.}\PY{n}{strip}\PY{p}{(}\PY{p}{)}
+                \PY{o}{.}\PY{n}{isin}\PY{p}{(}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{YES}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TRUE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+            \PY{p}{)}
+    \PY{n}{df\PYZus{}part}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{discipline\PYZus{}score}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{score}
+    \PY{k}{return} \PY{n}{df\PYZus{}part}
+
+\PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{add\PYZus{}derived\PYZus{}features}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{)}
+\PY{n}{X\PYZus{}test} \PY{o}{=} \PY{n}{add\PYZus{}derived\PYZus{}features}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Update EDA frame}
+\PY{n}{train\PYZus{}eda} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+\PY{n}{train\PYZus{}eda}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{values}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Engineered features summary (training set):}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  total\PYZus{}children     — mean: }\PY{l+s+si}{\PYZob{}}\PY{n}{X\PYZus{}train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{total\PYZus{}children}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.2f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  child\PYZus{}labour\PYZus{}flag  — proportion in labour: }\PY{l+s+si}{\PYZob{}}\PY{n}{X\PYZus{}train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{child\PYZus{}labour\PYZus{}flag}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.1\PYZpc{}}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  wealth\PYZus{}age         — mean: }\PY{l+s+si}{\PYZob{}}\PY{n}{X\PYZus{}train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{wealth\PYZus{}age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.2f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  discipline\PYZus{}score   — mean: }\PY{l+s+si}{\PYZob{}}\PY{n}{X\PYZus{}train}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{discipline\PYZus{}score}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.2f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{  (range 0–3)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Engineered features summary (training set):
+  total\_children     — mean: 4.12
+  child\_labour\_flag  — proportion in labour: 24.1\%
+  wealth\_age         — mean: 0.64
+  discipline\_score   — mean: 1.33  (range 0–3)
+    \end{Verbatim}
+
+    \hypertarget{missing-data-analysis-and-filtering}{%
+\subsection{2.7 Missing Data Analysis and
+Filtering}\label{missing-data-analysis-and-filtering}}
+
+Missing data arise for several structural reasons in this survey
+dataset. Some variables are conditional on prior responses (e.g.~CL3,
+child labour hours, is asked only of children currently engaged in
+labour, making it structurally missing for the majority), while others
+reflect genuine non-response or routing logic. Visual inspection of
+missingness rates guides two removal decisions.
+
+\textbf{Feature removal:} Following the recommendation that a missing
+data proportion exceeding 40\% in a feature typically indicates a
+variable unsuitable for standard imputation strategies {[}6,7{]},
+features with more than 40\% missing values in the training set are
+dropped. Only CL3 (68.3\% missing) exceeds this threshold, and its key
+signal has already been captured by \texttt{child\_labour\_flag}.
+
+\textbf{Row removal:} Rows in which more than 20\% of feature values are
+missing are dropped from all three partitions. Missing values in rows
+below this threshold are subsequently handled by imputation within the
+preprocessing pipeline. Critically, both thresholds are determined
+exclusively on the training set, and the resulting column and row
+indices are then applied to the validation and test sets without
+refitting.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{8}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Top\PYZhy{}5 feature missingness rates}
+\PY{n}{missing\PYZus{}rate\PYZus{}train} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{isna}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\PY{n}{top10\PYZus{}miss} \PY{o}{=} \PY{n}{missing\PYZus{}rate\PYZus{}train}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{top10\PYZus{}miss}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Features with \PYZgt{} }\PY{l+s+si}{\PYZob{}}\PY{n}{FEAT\PYZus{}MISS\PYZus{}THRESH}\PY{l+s+si}{:}\PY{l+s+s2}{.0\PYZpc{}}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ missing: }\PY{l+s+s2}{\PYZdq{}}
+      \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{p}{(}\PY{n}{missing\PYZus{}rate\PYZus{}train}\PY{+w}{ }\PY{o}{\PYZgt{}}\PY{+w}{ }\PY{n}{FEAT\PYZus{}MISS\PYZus{}THRESH}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Apply feature drop (threshold determined on training set only)}
+\PY{n}{keep\PYZus{}cols} \PY{o}{=} \PY{n}{missing\PYZus{}rate\PYZus{}train}\PY{p}{[}\PY{n}{missing\PYZus{}rate\PYZus{}train} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{n}{FEAT\PYZus{}MISS\PYZus{}THRESH}\PY{p}{]}\PY{o}{.}\PY{n}{index}
+\PY{n}{n\PYZus{}feat\PYZus{}before} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{X\PYZus{}train} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{keep\PYZus{}cols}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+\PY{n}{X\PYZus{}test} \PY{o}{=} \PY{n}{X\PYZus{}test}\PY{p}{[}\PY{n}{keep\PYZus{}cols}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Features: }\PY{l+s+si}{\PYZob{}}\PY{n}{n\PYZus{}feat\PYZus{}before}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ \PYZhy{}\PYZgt{} }\PY{l+s+si}{\PYZob{}}\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{  }\PY{l+s+s2}{\PYZdq{}}
+      \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{(dropped: }\PY{l+s+si}{\PYZob{}}\PY{n}{n\PYZus{}feat\PYZus{}before}\PY{+w}{ }\PY{o}{\PYZhy{}}\PY{+w}{ }\PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Apply row drop}
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{apply\PYZus{}row\PYZus{}filter}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{threshold}\PY{o}{=}\PY{n}{ROW\PYZus{}MISS\PYZus{}THRESH}\PY{p}{)}\PY{p}{:}
+    \PY{n}{keep} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{isna}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{n}{threshold}
+    \PY{k}{return} \PY{n}{X}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{keep}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{y}\PY{o}{.}\PY{n}{loc}\PY{p}{[}\PY{n}{keep}\PY{p}{]}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{keep}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,} \PY{n}{n\PYZus{}tr} \PY{o}{=} \PY{n}{apply\PYZus{}row\PYZus{}filter}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{)}
+\PY{n}{X\PYZus{}test}\PY{p}{,} \PY{n}{y\PYZus{}test}\PY{p}{,} \PY{n}{n\PYZus{}te} \PY{o}{=} \PY{n}{apply\PYZus{}row\PYZus{}filter}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{,}  \PY{n}{y\PYZus{}test}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Rows after }\PY{l+s+si}{\PYZob{}}\PY{n}{ROW\PYZus{}MISS\PYZus{}THRESH}\PY{l+s+si}{:}\PY{l+s+s2}{.0\PYZpc{}}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{ row filter:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  Train: }\PY{l+s+si}{\PYZob{}}\PY{n}{n\PYZus{}tr}\PY{l+s+si}{:}\PY{l+s+s2}{,}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{  |  Test: }\PY{l+s+si}{\PYZob{}}\PY{n}{n\PYZus{}te}\PY{l+s+si}{:}\PY{l+s+s2}{,}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Refresh EDA frame after row filter}
+\PY{n}{train\PYZus{}eda} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+\PY{n}{train\PYZus{}eda}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{values}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+CL3     0.683303
+FCD5    0.379874
+HW5     0.263538
+MA2     0.238267
+MA3     0.225181
+dtype: float64
+Features with > 40\% missing: 1
+Features: 86 -> 85  (dropped: 1)
+
+Rows after 20\% row filter:
+  Train: 10,805  |  Test: 1,893
+    \end{Verbatim}
+
+    \hypertarget{ordinal-variable-cleaning-and-category-merging}{%
+\subsection{2.8 Ordinal Variable Cleaning and Category
+Merging}\label{ordinal-variable-cleaning-and-category-merging}}
+
+Thirteen variables are identified as ordinal, which measure constructs
+with a meaningful natural order but unequal or unknown interval spacing.
+These require preprocessing that preserves rank structure while reducing
+unnecessary sparsity from rare or overlapping categories. A
+\texttt{clean\_merge\_ordinal()} function is applied uniformly to all
+three data partitions.
+
+The key transformations are: (1) recoding genuinely non-applicable
+responses as missing (e.g.~`NEVER WALK ALONE AFTER DARK' in the safety
+perception variables VT20 and VT21, which is not a position on the
+safety scale), (2) merging educationally rare upper-level categories
+(e.g.~`HIGHER' education absorbed into `UPPER SECONDARY' for child's
+school level, where fewer than 0.5\% of observations fall in the highest
+tier), (3) collapsing `A LOT OF DIFFICULTY' with `SOME DIFFICULTY' for
+the maternal functioning variables AF11 and AF12, where the `A LOT'
+category contains fewer than 15 observations in the training set, and
+(4) standardising grade label strings for consistency with the encoder's
+category list.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{9}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Define ordinal candidates}
+\PY{n}{ORDINAL\PYZus{}CANDIDATES} \PY{o}{=} \PY{p}{[}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CB5A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CB5B}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}          \PY{c+c1}{\PYZsh{} child\PYZsq{}s current school level and grade}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB6A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB6B}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}          \PY{c+c1}{\PYZsh{} mother\PYZsq{}s education level and grade}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB14}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}                  \PY{c+c1}{\PYZsh{} mother\PYZsq{}s literacy}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AF10}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AF11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AF12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}  \PY{c+c1}{\PYZsh{} maternal functioning difficulties}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LS1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LS3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LS4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}     \PY{c+c1}{\PYZsh{} life satisfaction (level, vs 1yr ago, vs 1yr ahead)}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VT20}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VT21}\PY{l+s+s1}{\PYZsq{}}          \PY{c+c1}{\PYZsh{} perceived safety walking alone at night}
+\PY{p}{]}
+\PY{n}{ordinal\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{n}{c} \PY{k}{for} \PY{n}{c} \PY{o+ow}{in} \PY{n}{ORDINAL\PYZus{}CANDIDATES} \PY{k}{if} \PY{n}{c} \PY{o+ow}{in} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{columns}\PY{p}{]}
+
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{clean\PYZus{}merge\PYZus{}ordinal}\PY{p}{(}\PY{n}{df\PYZus{}in}\PY{p}{,} \PY{n}{cols}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Recode non\PYZhy{}applicable responses and merge rare/overlapping categories.\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{n}{df\PYZus{}out} \PY{o}{=} \PY{n}{df\PYZus{}in}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+    \PY{n}{grade\PYZus{}map} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{CLASS/YEAR/GRADE }\PY{l+s+si}{\PYZob{}}\PY{n}{i}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{GRADE }\PY{l+s+si}{\PYZob{}}\PY{n}{i}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{9}\PY{p}{)}\PY{p}{\PYZcb{}}
+    \PY{n}{grade\PYZus{}map}\PY{o}{.}\PY{n}{update}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{CLASS/GRADE 6}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{GRADE 6}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                       \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{CLASS/GRADE 7}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{GRADE 7}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+                       \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{CLASS/GRADE 8}\PY{l+s+s2}{\PYZdq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{GRADE 8}\PY{l+s+s2}{\PYZdq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} Non\PYZhy{}applicable \PYZhy{}\PYZgt{} NaN}
+    \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB14}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{cols}\PY{p}{:}
+        \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB14}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB14}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}
+            \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NO SENTENCE IN REQUIRED LANGUAGE / BRAILLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{nan}\PY{p}{\PYZcb{}}\PY{p}{)}
+    \PY{k}{for} \PY{n}{v} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VT20}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VT21}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{if} \PY{n}{v} \PY{o+ow}{in} \PY{n}{cols}\PY{p}{:}
+            \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{n}{v}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{n}{v}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NEVER WALK ALONE AFTER DARK}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{nan}\PY{p}{\PYZcb{}}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} Merge rare upper education tier}
+    \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CB5A}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{cols}\PY{p}{:}
+        \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CB5A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CB5A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HIGHER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{UPPER SECONDARY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+    \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB6A}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{cols}\PY{p}{:}
+        \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB6A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB6A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}
+            \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ECE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PRIMARY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VOCATIONAL TRAINING}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{UPPER SECONDARY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} Collapse very small difficulty categories}
+    \PY{k}{for} \PY{n}{v} \PY{o+ow}{in} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AF11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AF12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+        \PY{k}{if} \PY{n}{v} \PY{o+ow}{in} \PY{n}{cols}\PY{p}{:}
+            \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{n}{v}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{n}{v}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A LOT OF DIFFICULTY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SOME DIFFICULTY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{\PYZcb{}}\PY{p}{)}
+    \PY{c+c1}{\PYZsh{} Standardise grade labels}
+    \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CB5B}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{cols}\PY{p}{:} \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CB5B}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CB5B}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{n}{grade\PYZus{}map}\PY{p}{)}
+    \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB6B}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{cols}\PY{p}{:} \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB6B}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB6B}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{n}{grade\PYZus{}map}\PY{p}{)}
+    \PY{k}{return} \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{n}{cols}\PY{p}{]}
+
+\PY{k}{for} \PY{n}{split} \PY{o+ow}{in} \PY{p}{[}\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{X\PYZus{}test}\PY{p}{]}\PY{p}{:}
+    \PY{n}{split}\PY{p}{[}\PY{n}{ordinal\PYZus{}cols}\PY{p}{]} \PY{o}{=} \PY{n}{clean\PYZus{}merge\PYZus{}ordinal}\PY{p}{(}\PY{n}{split}\PY{p}{,} \PY{n}{ordinal\PYZus{}cols}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Show after for three key variables}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Category counts after merging (training set):}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{k}{for} \PY{n}{col} \PY{o+ow}{in} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CB5A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB6A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AF11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{  }\PY{l+s+si}{\PYZob{}}\PY{n}{col}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{:}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  }\PY{l+s+si}{\PYZob{}}\PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{n}{dropna}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{to\PYZus{}dict}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Category counts after merging (training set):
+
+  CB5A:
+  \{'PRIMARY': 9159, nan: 712, 'ECE': 503, 'LOWER SECONDARY': 305, 'UPPER
+SECONDARY': 126\}
+
+  WB6A:
+  \{'PRIMARY': 7308, nan: 1300, 'LOWER SECONDARY': 1097, 'UPPER SECONDARY': 922,
+'HIGHER': 178\}
+
+  AF11:
+  \{'NO DIFFICULTY': 10612, 'SOME DIFFICULTY': 185, nan: 8\}
+    \end{Verbatim}
+
+    \hypertarget{nominal-variable-cleaning-and-category-merging}{%
+\subsection{2.9 Nominal Variable Cleaning and Category
+Merging}\label{nominal-variable-cleaning-and-category-merging}}
+
+Six variables are treated as nominal, which have no inherent order.
+Merging semantically similar categories reduces one-hot encoding
+sparsity and prevents individual rare categories from receiving zero or
+near-zero weight estimates. All groupings are made on substantive public
+health grounds rather than statistical convenience.
+
+For drinking water source (WS1), categories are collapsed to three tiers
+that reflect the WHO/UNICEF Joint Monitoring Programme hierarchy: piped
+water (highest safety), groundwater (boreholes, protected/unprotected
+wells and springs), and other water (surface, delivered, purchased, or
+rainwater). Sanitation facility type (WS11) is similarly collapsed by
+upgrade level. Floor (HC4) and roof (HC5) materials are grouped into
+`basic' and `finished' tiers, following the established convention for
+housing quality as a poverty proxy {[}3{]}. Ethnicity categories with
+very low frequency are grouped to prevent near-zero class support in the
+one-hot encoded matrix.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{10}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Define nominal candidates}
+\PY{n}{NOMINAL\PYZus{}CANDIDATES} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WS1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WS11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HC5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HC4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ethnicity}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WS3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{nominal\PYZus{}candidates} \PY{o}{=} \PY{p}{[}\PY{n}{c} \PY{k}{for} \PY{n}{c} \PY{o+ow}{in} \PY{n}{NOMINAL\PYZus{}CANDIDATES} \PY{k}{if} \PY{n}{c} \PY{o+ow}{in} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{columns}\PY{p}{]}
+
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{clean\PYZus{}merge\PYZus{}nominal}\PY{p}{(}\PY{n}{df\PYZus{}in}\PY{p}{,} \PY{n}{cols}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Group nominal categories by substantive meaning to reduce sparsity.}
+\PY{l+s+sd}{    WS1: piped/groundwater/other (WHO\PYZhy{}JMP hierarchy)}
+\PY{l+s+sd}{    WS11: flush/improved pit/open pit/other sanitation}
+\PY{l+s+sd}{    HC4: basic vs finished floor}
+\PY{l+s+sd}{    HC5: basic vs finished roof}
+\PY{l+s+sd}{    ethnicity: rare categories pooled}
+\PY{l+s+sd}{    WS3: left as\PYZhy{}is}
+\PY{l+s+sd}{    \PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{n}{df\PYZus{}out} \PY{o}{=} \PY{n}{df\PYZus{}in}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{p}{)}
+    \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WS1}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{cols}\PY{p}{:}
+        \PY{n}{ws1} \PY{o}{=} \PY{p}{\PYZob{}}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PIPED WATER: PIPED INTO DWELLING}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PIPED WATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PIPED WATER: PIPED TO YARD / PLOT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PIPED WATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PIPED WATER: PIPED TO NEIGHBOUR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PIPED WATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PIPED WATER: PUBLIC TAP / STANDPIPE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PIPED WATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TUBE WELL / BOREHOLE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GROUNDWATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DUG WELL: PROTECTED WELL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GROUNDWATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DUG WELL: UNPROTECTED WELL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GROUNDWATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SPRING: PROTECTED SPRING}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GROUNDWATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SPRING: UNPROTECTED SPRING}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GROUNDWATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SURFACE WATER (RIVER, DAM, LAKE, POND, STREAM, CANAL, IRRIGATION CHANNEL)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OTHER WATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CART WITH SMALL TANK}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OTHER WATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{TANKER\PYZhy{}TRUCK}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OTHER WATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PACKAGED WATER: BOTTLED WATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OTHER WATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WATER KIOSK}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OTHER WATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{RAINWATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OTHER WATER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OTHER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OTHER WATER}\PY{l+s+s1}{\PYZsq{}}
+        \PY{p}{\PYZcb{}}
+        \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WS1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WS1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{n}{ws1}\PY{p}{)}
+    \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WS11}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{cols}\PY{p}{:}
+        \PY{n}{ws11} \PY{o}{=} \PY{p}{\PYZob{}}
+            \PY{n}{k}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FLUSH TOILET}\PY{l+s+s1}{\PYZsq{}}
+            \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FLUSH / POUR FLUSH: FLUSH TO PIPED SEWER SYSTEM}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                      \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FLUSH / POUR FLUSH: FLUSH TO SEPTIC TANK}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                      \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FLUSH / POUR FLUSH: FLUSH TO PIT LATRINE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                      \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FLUSH / POUR FLUSH: FLUSH TO OPEN DRAIN}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                      \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FLUSH / POUR FLUSH: FLUSH TO DK WHERE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+        \PY{p}{\PYZcb{}}
+        \PY{n}{ws11}\PY{o}{.}\PY{n}{update}\PY{p}{(}\PY{p}{\PYZob{}}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PIT LATRINE: VENTILATED IMPROVED PIT LATRINE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{IMPROVED PIT LATRINE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PIT LATRINE: PIT LATRINE WITH SLAB}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{IMPROVED PIT LATRINE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PIT LATRINE: PIT LATRINE WITHOUT SLAB / OPEN PIT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OPEN PIT LATRINE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{COMPOSTING TOILET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OTHER SANITATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BUCKET}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OTHER SANITATION}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+            \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HANGING TOILET / HANGING LATRINE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{OTHER SANITATION}\PY{l+s+s1}{\PYZsq{}}
+        \PY{p}{\PYZcb{}}\PY{p}{)}
+        \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WS11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WS11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{n}{ws11}\PY{p}{)}
+    \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HC4}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{cols}\PY{p}{:}
+        \PY{n}{hc4} \PY{o}{=} \PY{p}{\PYZob{}}\PY{n}{k}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BASIC FLOOR}\PY{l+s+s1}{\PYZsq{}} \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{EARTH / SAND}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{DUNG}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PALM / BAMBOO}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{\PYZcb{}}
+        \PY{n}{hc4}\PY{o}{.}\PY{n}{update}\PY{p}{(}\PY{p}{\PYZob{}}\PY{n}{k}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FINISHED FLOOR}\PY{l+s+s1}{\PYZsq{}} \PY{k}{for} \PY{n}{k} \PY{o+ow}{in}
+                    \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CEMENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CERAMIC TILES}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VINYL / ASPHALT STRIPS}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WOOD PLANKS / SHINGLES}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{\PYZcb{}}\PY{p}{)}
+        \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HC4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HC4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{n}{hc4}\PY{p}{)}
+    \PY{k}{if} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HC5}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{in} \PY{n}{cols}\PY{p}{:}
+        \PY{n}{hc5} \PY{o}{=} \PY{p}{\PYZob{}}\PY{n}{k}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BASIC ROOF}\PY{l+s+s1}{\PYZsq{}} \PY{k}{for} \PY{n}{k} \PY{o+ow}{in} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{THATCH / PALM LEAF}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{RUSTIC MAT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NO ROOF}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{\PYZcb{}}
+        \PY{n}{hc5}\PY{o}{.}\PY{n}{update}\PY{p}{(}\PY{p}{\PYZob{}}\PY{n}{k}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FINISHED ROOF}\PY{l+s+s1}{\PYZsq{}} \PY{k}{for} \PY{n}{k} \PY{o+ow}{in}
+                    \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{IRON SHEETS / METAL / TIN}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CEMENT}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ROOFING SHINGLES}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                     \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WOOD PLANKS}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CALAMINE / CEMENT FIBRE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{\PYZcb{}}\PY{p}{)}
+        \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HC5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HC5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{n}{hc5}\PY{p}{)}
+    \PY{k}{return} \PY{n}{df\PYZus{}out}\PY{p}{[}\PY{n}{cols}\PY{p}{]}
+
+\PY{k}{for} \PY{n}{split} \PY{o+ow}{in} \PY{p}{[}\PY{n}{X\PYZus{}train}\PY{p}{,} \PY{n}{X\PYZus{}test}\PY{p}{]}\PY{p}{:}
+    \PY{n}{split}\PY{p}{[}\PY{n}{nominal\PYZus{}candidates}\PY{p}{]} \PY{o}{=} \PY{n}{clean\PYZus{}merge\PYZus{}nominal}\PY{p}{(}\PY{n}{split}\PY{p}{,} \PY{n}{nominal\PYZus{}candidates}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Nominal columns merged:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{nominal\PYZus{}candidates}\PY{p}{)}
+\PY{k}{for} \PY{n}{col} \PY{o+ow}{in} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WS1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HC4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HC5}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{:}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{  }\PY{l+s+si}{\PYZob{}}\PY{n}{col}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{X\PYZus{}train}\PY{p}{[}\PY{n}{col}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{n}{dropna}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{to\PYZus{}dict}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Nominal columns merged: ['WS1', 'WS11', 'HC5', 'HC4', 'ethnicity', 'WS3']
+
+  WS1: \{'GROUNDWATER': 8280, 'PIPED WATER': 2101, 'OTHER WATER': 424\}
+
+  HC4: \{'BASIC FLOOR': 7683, 'FINISHED FLOOR': 3103, 'PARQUET OR POLISHED WOOD':
+5, 'OTHER': 4, 'WOOD PLANKS': 4, 'CARPET': 4, 'VINYL OR ASPHALT STRIPS': 2\}
+
+  HC5: \{'FINISHED ROOF': 6119, 'BASIC ROOF': 4660, 'CERAMIC TILES': 10, 'WOOD':
+9, 'OTHER': 4, 'PALM / BAMBOO': 3\}
+    \end{Verbatim}
+
+    \hypertarget{final-feature-type-classification}{%
+\subsection{2.10 Final Feature Type
+Classification}\label{final-feature-type-classification}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{11}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Assign final column type lists}
+\PY{c+c1}{\PYZsh{} Numeric: continuous and integer\PYZhy{}valued variables}
+\PY{n}{num\PYZus{}cols} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{select\PYZus{}dtypes}\PY{p}{(}\PY{n}{include}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{number}\PY{p}{)}\PY{o}{.}\PY{n}{columns}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Ordinal: categorical with meaningful rank structure}
+\PY{n}{cat\PYZus{}cols} \PY{o}{=} \PY{n}{X\PYZus{}train}\PY{o}{.}\PY{n}{select\PYZus{}dtypes}\PY{p}{(}\PY{n}{exclude}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{number}\PY{p}{)}\PY{o}{.}\PY{n}{columns}\PY{o}{.}\PY{n}{tolist}\PY{p}{(}\PY{p}{)}
+\PY{n}{ordinal\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{n}{c} \PY{k}{for} \PY{n}{c} \PY{o+ow}{in} \PY{n}{ORDINAL\PYZus{}CANDIDATES} \PY{k}{if} \PY{n}{c} \PY{o+ow}{in} \PY{n}{cat\PYZus{}cols}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} Nominal: remaining categorical (no intrinsic order)}
+\PY{n}{nominal\PYZus{}cols} \PY{o}{=} \PY{p}{[}\PY{n}{c} \PY{k}{for} \PY{n}{c} \PY{o+ow}{in} \PY{n}{cat\PYZus{}cols} \PY{k}{if} \PY{n}{c} \PY{o+ow}{not} \PY{o+ow}{in} \PY{n}{ordinal\PYZus{}cols}\PY{p}{]}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Numeric features:  }\PY{l+s+si}{\PYZob{}}\PY{n+nb}{len}\PY{p}{(}\PY{n}{num\PYZus{}cols}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Ordinal features:  }\PY{l+s+si}{\PYZob{}}\PY{n+nb}{len}\PY{p}{(}\PY{n}{ordinal\PYZus{}cols}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Nominal features:  }\PY{l+s+si}{\PYZob{}}\PY{n+nb}{len}\PY{p}{(}\PY{n}{nominal\PYZus{}cols}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Total features:    }\PY{l+s+si}{\PYZob{}}\PY{n+nb}{len}\PY{p}{(}\PY{n}{num\PYZus{}cols}\PY{p}{)}\PY{+w}{ }\PY{o}{+}\PY{+w}{ }\PY{n+nb}{len}\PY{p}{(}\PY{n}{ordinal\PYZus{}cols}\PY{p}{)}\PY{+w}{ }\PY{o}{+}\PY{+w}{ }\PY{n+nb}{len}\PY{p}{(}\PY{n}{nominal\PYZus{}cols}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Ordinal columns: }\PY{l+s+si}{\PYZob{}}\PY{n}{ordinal\PYZus{}cols}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Numeric features:  15
+Ordinal features:  13
+Nominal features:  57
+Total features:    85
+
+Ordinal columns: ['CB5A', 'CB5B', 'WB6A', 'WB6B', 'WB14', 'AF10', 'AF11',
+'AF12', 'LS1', 'LS3', 'LS4', 'VT20', 'VT21']
+    \end{Verbatim}
+
+    \hypertarget{pearson-correlation-heatmap}{%
+\subsection{2.11 Pearson Correlation
+Heatmap}\label{pearson-correlation-heatmap}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{12}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Figure 2: Correlation heatmap}
+\PY{n}{numeric\PYZus{}for\PYZus{}corr} \PY{o}{=} \PY{p}{[}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CB3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{wscore}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CSURV}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CDEAD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{total\PYZus{}children}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{child\PYZus{}labour\PYZus{}flag}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{wealth\PYZus{}age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{discipline\PYZus{}score}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{]}
+\PY{n}{numeric\PYZus{}for\PYZus{}corr} \PY{o}{=} \PY{p}{[}\PY{n}{c} \PY{k}{for} \PY{n}{c} \PY{o+ow}{in} \PY{n}{numeric\PYZus{}for\PYZus{}corr} \PY{k}{if} \PY{n}{c} \PY{o+ow}{in} \PY{n}{train\PYZus{}eda}\PY{o}{.}\PY{n}{columns}\PY{p}{]}
+
+\PY{n}{label\PYZus{}map\PYZus{}corr} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CB3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Child Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{wscore}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wealth Score}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Mother}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{s Age}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CSURV}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Surviving Children}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CDEAD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Deceased Children}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Child Labour (bool)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CL12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HH Work (bool)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{total\PYZus{}children}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Total Children*}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{child\PYZus{}labour\PYZus{}flag}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Labour Flag*}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{wealth\PYZus{}age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wealth×Age*}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{discipline\PYZus{}score}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Discipline Score*}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Depression}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{\PYZcb{}}
+
+\PY{n}{corr\PYZus{}df} \PY{o}{=} \PY{n}{train\PYZus{}eda}\PY{p}{[}\PY{n}{numeric\PYZus{}for\PYZus{}corr} \PY{o}{+} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{]}\PY{o}{.}\PY{n}{rename}\PY{p}{(}\PY{n}{columns}\PY{o}{=}\PY{n}{label\PYZus{}map\PYZus{}corr}\PY{p}{)}
+\PY{n}{corr\PYZus{}matrix} \PY{o}{=} \PY{n}{corr\PYZus{}df}\PY{o}{.}\PY{n}{corr}\PY{p}{(}\PY{p}{)}
+\PY{n}{mask} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{eye}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{corr\PYZus{}matrix}\PY{p}{)}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n+nb}{bool}\PY{p}{)}
+
+\PY{n}{fig}\PY{p}{,} \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{9}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{sns}\PY{o}{.}\PY{n}{heatmap}\PY{p}{(}\PY{n}{corr\PYZus{}matrix}\PY{p}{,} \PY{n}{annot}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{fmt}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.2f}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{coolwarm}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{center}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,}
+            \PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{,} \PY{n}{linewidths}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{,} \PY{n}{square}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{mask}\PY{o}{=}\PY{n}{mask}\PY{p}{,}
+            \PY{n}{annot\PYZus{}kws}\PY{o}{=}\PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{size}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+m+mf}{7.5}\PY{p}{\PYZcb{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Figure 2: Pearson Correlation Matrix — Numeric Features and Depression Target}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(* = engineered feature, training set only)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{11}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{B300238_B296110_MachineLearninginPython_ICA_files/B300238_B296110_MachineLearninginPython_ICA_28_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \textbf{Figure 2.} Pearson correlation matrix for numeric features and
+the binary depression target (training set). All individual correlations
+with the target are weak (\textbar r\textbar{} \textless= 0.10),
+confirming that no single numeric predictor provides strong linear
+separation. Wealth Score shows the strongest association (r = −0.06),
+though Pearson r underestimates its true effect given the variable's
+right-skewed distribution. The \texttt{Wealth×Age} interaction is
+near-perfectly collinear with Wealth Score (r \textasciitilde{} 0.94),
+which is benign for Random Forest but inflates LR coefficient variance
+for these two features.
+
+    \hypertarget{preprocessing-pipeline}{%
+\subsection{2.12 Preprocessing Pipeline}\label{preprocessing-pipeline}}
+
+The preprocessing pipeline is constructed using sklearn's
+\texttt{ColumnTransformer} with three parallel sub-pipelines, each
+fitted exclusively on the training set and then applied to the test set
+to prevent data leakage.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Numeric features} receive median imputation (robust to the
+  right-skewed distributions observed in several survey items such as
+  wealth score and age) followed by standardisation via
+  \texttt{StandardScaler}.
+\item
+  \textbf{Ordinal features} receive mode imputation followed by
+  \texttt{OrdinalEncoder} with explicitly specified category orderings,
+  preserving the rank structure defined in the ordinal cleaning step
+  above. The
+  \texttt{handle\_unknown=\textquotesingle{}use\_encoded\_value\textquotesingle{}}
+  option assigns unseen categories a sentinel value of −1 rather than
+  raising an error.
+\item
+  \textbf{Nominal features} receive mode imputation followed by
+  \texttt{OneHotEncoder} with
+  \texttt{drop=\textquotesingle{}first\textquotesingle{}} to avoid the
+  dummy variable trap in Logistic Regression, and
+  \texttt{handle\_unknown=\textquotesingle{}ignore\textquotesingle{}} to
+  silently zero-out any unseen categories at prediction time.
+\end{itemize}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{13}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Define ordered categories for OrdinalEncoder}
+\PY{n}{ORDINAL\PYZus{}CATEGORY\PYZus{}DEFS} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CB5A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ECE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PRIMARY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LOWER SECONDARY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{UPPER SECONDARY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CB5B}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GRADE }\PY{l+s+si}{\PYZob{}}\PY{n}{i}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{9}\PY{p}{)}\PY{p}{]}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB6A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{PRIMARY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LOWER SECONDARY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{UPPER SECONDARY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{HIGHER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB6B}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{GRADE }\PY{l+s+si}{\PYZob{}}\PY{n}{i}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{9}\PY{p}{)}\PY{p}{]}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WB14}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{CANNOT READ AT ALL}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ABLE TO READ ONLY PARTS OF SENTENCE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ABLE TO READ WHOLE SENTENCE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AF10}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NO DIFFICULTY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SOME DIFFICULTY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{A LOT OF DIFFICULTY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AF11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NO DIFFICULTY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SOME DIFFICULTY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{AF12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NO DIFFICULTY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SOME DIFFICULTY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LS1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}  \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VERY UNHAPPY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SOMEWHAT UNHAPPY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{NEITHER HAPPY NOR UNHAPPY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SOMEWHAT HAPPY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VERY HAPPY}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LS3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}  \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WORSENED}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{MORE OR LESS THE SAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{IMPROVED}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LS4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:}  \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{WORSE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{MORE OR LESS THE SAME}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{BETTER}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VT20}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VERY UNSAFE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{UNSAFE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SAFE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VERY SAFE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VT21}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VERY UNSAFE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{UNSAFE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SAFE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{VERY SAFE}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{p}{\PYZcb{}}
+\PY{n}{ordinal\PYZus{}categories} \PY{o}{=} \PY{p}{[}\PY{n}{ORDINAL\PYZus{}CATEGORY\PYZus{}DEFS}\PY{p}{[}\PY{n}{c}\PY{p}{]} \PY{k}{for} \PY{n}{c} \PY{o+ow}{in} \PY{n}{ordinal\PYZus{}cols}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} Build sub\PYZhy{}pipelines}
+\PY{n}{num\PYZus{}pipe} \PY{o}{=} \PY{n}{Pipeline}\PY{p}{(}\PY{p}{[}
+    \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{imputer}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{SimpleImputer}\PY{p}{(}\PY{n}{strategy}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{median}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+    \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{scaler}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}  \PY{n}{StandardScaler}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{p}{]}\PY{p}{)}
+\PY{n}{ordinal\PYZus{}pipe} \PY{o}{=} \PY{n}{Pipeline}\PY{p}{(}\PY{p}{[}
+    \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{imputer}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{SimpleImputer}\PY{p}{(}\PY{n}{strategy}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{most\PYZus{}frequent}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+    \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{encoder}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{OrdinalEncoder}\PY{p}{(}
+        \PY{n}{categories}\PY{o}{=}\PY{n}{ordinal\PYZus{}categories}\PY{p}{,}
+        \PY{n}{handle\PYZus{}unknown}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{use\PYZus{}encoded\PYZus{}value}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+        \PY{n}{unknown\PYZus{}value}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
+    \PY{p}{)}\PY{p}{)}
+\PY{p}{]}\PY{p}{)}
+\PY{n}{nominal\PYZus{}pipe} \PY{o}{=} \PY{n}{Pipeline}\PY{p}{(}\PY{p}{[}
+    \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{imputer}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{SimpleImputer}\PY{p}{(}\PY{n}{strategy}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{most\PYZus{}frequent}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+    \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{encoder}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{OneHotEncoder}\PY{p}{(}
+        \PY{n}{drop}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{first}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{handle\PYZus{}unknown}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ignore}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{sparse\PYZus{}output}\PY{o}{=}\PY{k+kc}{False}
+    \PY{p}{)}\PY{p}{)}
+\PY{p}{]}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Assemble ColumnTransformer}
+\PY{n}{preprocessor} \PY{o}{=} \PY{n}{ColumnTransformer}\PY{p}{(}\PY{p}{[}
+    \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{num\PYZus{}pipe}\PY{p}{,} \PY{n}{num\PYZus{}cols}\PY{p}{)}\PY{p}{,}
+    \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{ordinal\PYZus{}pipe}\PY{p}{,} \PY{n}{ordinal\PYZus{}cols}\PY{p}{)}\PY{p}{,}
+    \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nom}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{nominal\PYZus{}pipe}\PY{p}{,} \PY{n}{nominal\PYZus{}cols}\PY{p}{)}
+\PY{p}{]}\PY{p}{,} \PY{n}{remainder}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{drop}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Fit on training set only, transform train and test}
+\PY{n}{preprocessor}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{)}
+\PY{n}{X\PYZus{}train\PYZus{}proc\PYZus{}full} \PY{o}{=} \PY{n}{preprocessor}\PY{o}{.}\PY{n}{transform}\PY{p}{(}\PY{n}{X\PYZus{}train}\PY{p}{)}
+\PY{n}{X\PYZus{}test\PYZus{}proc\PYZus{}full}  \PY{o}{=} \PY{n}{preprocessor}\PY{o}{.}\PY{n}{transform}\PY{p}{(}\PY{n}{X\PYZus{}test}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Processed shapes: train=}\PY{l+s+si}{\PYZob{}}\PY{n}{X\PYZus{}train\PYZus{}proc\PYZus{}full}\PY{o}{.}\PY{n}{shape}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, test=}\PY{l+s+si}{\PYZob{}}\PY{n}{X\PYZus{}test\PYZus{}proc\PYZus{}full}\PY{o}{.}\PY{n}{shape}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{NaN in X\PYZus{}train\PYZus{}processed: }\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{isnan}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}proc\PYZus{}full}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{NaN in X\PYZus{}test\PYZus{}processed:  }\PY{l+s+si}{\PYZob{}}\PY{n}{np}\PY{o}{.}\PY{n}{isnan}\PY{p}{(}\PY{n}{X\PYZus{}test\PYZus{}proc\PYZus{}full}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Processed shapes: train=(10805, 113), test=(1893, 113)
+NaN in X\_train\_processed: 0
+NaN in X\_test\_processed:  0
+    \end{Verbatim}
+
+    \hypertarget{correlation-based-feature-selection}{%
+\subsection{2.13 Correlation-Based Feature
+Selection}\label{correlation-based-feature-selection}}
+
+Following the preprocessing pipeline, a lightweight Pearson correlation
+filter is applied to the processed feature matrix. Features whose
+absolute correlation with the binary target falls below 0.005 are
+removed. This threshold is calibrated as the product of the maximum
+individual feature--target correlation (\textasciitilde0.10) and the
+conventional significance level (0.05), following the approach of Ge and
+Zhang {[}8{]}. The filter is computed solely on the training set to
+prevent leakage, and the resulting feature index is applied to both
+partitions.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{14}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Compute Pearson correlations on training set}
+\PY{n}{feature\PYZus{}names} \PY{o}{=} \PY{n}{preprocessor}\PY{o}{.}\PY{n}{get\PYZus{}feature\PYZus{}names\PYZus{}out}\PY{p}{(}\PY{p}{)}
+
+\PY{n}{corr\PYZus{}with\PYZus{}y} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{Series}\PY{p}{(}
+    \PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{corrcoef}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}proc\PYZus{}full}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}
+     \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}proc\PYZus{}full}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{]}\PY{p}{,}
+    \PY{n}{index}\PY{o}{=}\PY{n}{feature\PYZus{}names}
+\PY{p}{)}\PY{o}{.}\PY{n}{fillna}\PY{p}{(}\PY{l+m+mf}{0.0}\PY{p}{)}
+
+\PY{n}{low\PYZus{}corr\PYZus{}count} \PY{o}{=} \PY{p}{(}\PY{n}{corr\PYZus{}with\PYZus{}y}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZlt{}} \PY{n}{CORR\PYZus{}THRESH}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Features with |corr| \PYZlt{} }\PY{l+s+si}{\PYZob{}}\PY{n}{CORR\PYZus{}THRESH}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: }\PY{l+s+si}{\PYZob{}}\PY{n}{low\PYZus{}corr\PYZus{}count}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{  (to be removed)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Apply filter}
+\PY{n}{keep\PYZus{}idx} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{corr\PYZus{}with\PYZus{}y}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{n}{CORR\PYZus{}THRESH}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n}{X\PYZus{}train\PYZus{}proc} \PY{o}{=} \PY{n}{X\PYZus{}train\PYZus{}proc\PYZus{}full}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{keep\PYZus{}idx}\PY{p}{]}
+\PY{n}{X\PYZus{}test\PYZus{}proc} \PY{o}{=} \PY{n}{X\PYZus{}test\PYZus{}proc\PYZus{}full}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{n}{keep\PYZus{}idx}\PY{p}{]}
+\PY{n}{feature\PYZus{}names\PYZus{}final} \PY{o}{=} \PY{n}{feature\PYZus{}names}\PY{p}{[}\PY{n}{keep\PYZus{}idx}\PY{p}{]}
+\PY{n}{corr\PYZus{}final} \PY{o}{=} \PY{n}{corr\PYZus{}with\PYZus{}y}\PY{o}{.}\PY{n}{iloc}\PY{p}{[}\PY{n}{keep\PYZus{}idx}\PY{p}{]}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Features retained after filter: }\PY{l+s+si}{\PYZob{}}\PY{n}{X\PYZus{}train\PYZus{}proc}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Final processed shape: train=}\PY{l+s+si}{\PYZob{}}\PY{n}{X\PYZus{}train\PYZus{}proc}\PY{o}{.}\PY{n}{shape}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, test=}\PY{l+s+si}{\PYZob{}}\PY{n}{X\PYZus{}test\PYZus{}proc}\PY{o}{.}\PY{n}{shape}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Features with |corr| < 0.005: 10  (to be removed)
+
+Features retained after filter: 103
+Final processed shape: train=(10805, 103), test=(1893, 103)
+    \end{Verbatim}
+
+    \hypertarget{model-fitting-and-tuning}{%
+\section{3. Model Fitting and Tuning}\label{model-fitting-and-tuning}}
+
+    \hypertarget{evaluation-metrics}{%
+\subsection{3.1 Evaluation Metrics}\label{evaluation-metrics}}
+
+Four complementary metrics are reported throughout this section.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{ROC-AUC:} the probability that a randomly chosen depressed
+  child is ranked higher than a randomly chosen non-depressed child.
+  Threshold-independent and robust to the mild class imbalance.
+\item
+  \textbf{Average Precision (AP):} the area under the Precision-Recall
+  curve. Emphasises the model's ability to identify positive cases
+  across all decision thresholds. A random classifier achieves AP equal
+  to the positive-class prevalence (\textasciitilde0.547).
+\item
+  \textbf{Accuracy:} proportion of correct predictions at the default
+  0.5 threshold.
+\item
+  \textbf{F1:} harmonic mean of precision and recall for the depression
+  class at the 0.5 threshold.
+\end{itemize}
+
+ROC-AUC is the primary optimisation metric for both models.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{15}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Shared evaluation helper}
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{evaluate\PYZus{}model}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{proba}\PY{p}{,} \PY{n}{threshold}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}Return a dict of four evaluation metrics.\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{n}{pred} \PY{o}{=} \PY{p}{(}\PY{n}{proba} \PY{o}{\PYZgt{}}\PY{o}{=} \PY{n}{threshold}\PY{p}{)}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+    \PY{k}{return} \PY{p}{\PYZob{}}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n}{name}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ROC\PYZhy{}AUC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n+nb}{round}\PY{p}{(}\PY{n}{roc\PYZus{}auc\PYZus{}score}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{proba}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Avg Precision}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n+nb}{round}\PY{p}{(}\PY{n}{average\PYZus{}precision\PYZus{}score}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{proba}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Accuracy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n+nb}{round}\PY{p}{(}\PY{n}{accuracy\PYZus{}score}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{pred}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}\PY{p}{,}
+        \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{F1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{n+nb}{round}\PY{p}{(}\PY{n}{f1\PYZus{}score}\PY{p}{(}\PY{n}{y\PYZus{}true}\PY{p}{,} \PY{n}{pred}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}
+    \PY{p}{\PYZcb{}}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{evaluate\PYZus{}model() helper defined.}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+evaluate\_model() helper defined.
+    \end{Verbatim}
+
+    \hypertarget{baseline-model-logistic-regression}{%
+\subsection{3.2 Baseline Model: Logistic
+Regression}\label{baseline-model-logistic-regression}}
+
+Logistic Regression with L2 (ridge) regularisation serves as the
+interpretable baseline. It provides directly readable coefficients by
+quantifying the log-odds change per unit change in each standardised
+feature, making it both a performance benchmark and an interpretive
+complement to the Random Forest. L2 regularisation is retained
+throughout to stabilise estimates in the presence of the
+multicollinearity (Figure 2).
+
+The regularisation strength C (where larger C = weaker penalty) is tuned
+over a six-point log-uniform grid via five-fold stratified
+cross-validation on the training set, with ROC-AUC as the sole scoring
+criterion. The value of C that maximises mean CV ROC-AUC is selected.
+The \texttt{max\_iter=1000} ensures convergence on the moderately
+high-dimensional processed feature matrix. The fitted model is then
+evaluated definitively on the held-out test set.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{16}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Logistic Regression — five\PYZhy{}fold stratified CV on training set, tuned on ROC\PYZhy{}AUC}
+\PY{n}{lr\PYZus{}base} \PY{o}{=} \PY{n}{LogisticRegression}\PY{p}{(}\PY{n}{penalty}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{l2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{max\PYZus{}iter}\PY{o}{=}\PY{l+m+mi}{1000}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{n}{RANDOM\PYZus{}STATE}\PY{p}{)}
+\PY{n}{param\PYZus{}grid\PYZus{}lr} \PY{o}{=} \PY{p}{\PYZob{}}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{p}{[}\PY{l+m+mf}{0.001}\PY{p}{,} \PY{l+m+mf}{0.01}\PY{p}{,} \PY{l+m+mf}{0.1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{100}\PY{p}{]}\PY{p}{\PYZcb{}}
+
+\PY{n}{lr\PYZus{}search} \PY{o}{=} \PY{n}{GridSearchCV}\PY{p}{(}
+    \PY{n}{lr\PYZus{}base}\PY{p}{,} \PY{n}{param\PYZus{}grid\PYZus{}lr}\PY{p}{,} \PY{n}{cv}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,}
+    \PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{roc\PYZus{}auc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{refit}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,}
+    \PY{n}{n\PYZus{}jobs}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{verbose}\PY{o}{=}\PY{l+m+mi}{0}
+\PY{p}{)}
+\PY{n}{lr\PYZus{}search}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}proc}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{)}
+
+\PY{n}{best\PYZus{}C} \PY{o}{=} \PY{n}{lr\PYZus{}search}\PY{o}{.}\PY{n}{best\PYZus{}params\PYZus{}}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{C}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\PY{n}{best\PYZus{}cv\PYZus{}auc} \PY{o}{=} \PY{n}{lr\PYZus{}search}\PY{o}{.}\PY{n}{best\PYZus{}score\PYZus{}}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LR Grid Search — Best C: }\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}C}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{  |  Best 5\PYZhy{}fold CV ROC\PYZhy{}AUC: }\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}cv\PYZus{}auc}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+
+\PY{n}{best\PYZus{}lr} \PY{o}{=} \PY{n}{lr\PYZus{}search}\PY{o}{.}\PY{n}{best\PYZus{}estimator\PYZus{}}
+\PY{n}{lr\PYZus{}proba\PYZus{}test} \PY{o}{=} \PY{n}{best\PYZus{}lr}\PY{o}{.}\PY{n}{predict\PYZus{}proba}\PY{p}{(}\PY{n}{X\PYZus{}test\PYZus{}proc}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{lr\PYZus{}pred\PYZus{}test} \PY{o}{=} \PY{n}{best\PYZus{}lr}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test\PYZus{}proc}\PY{p}{)}
+
+\PY{n}{lr\PYZus{}results\PYZus{}test} \PY{o}{=} \PY{n}{evaluate\PYZus{}model}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{,} \PY{n}{lr\PYZus{}proba\PYZus{}test}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LR (test)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{LR Test set — }\PY{l+s+si}{\PYZob{}}\PY{n}{lr\PYZus{}results\PYZus{}test}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+LR Grid Search — Best C: 0.1  |  Best 5-fold CV ROC-AUC: 0.6431
+LR Test set — \{'Model': 'LR (test)', 'ROC-AUC': 0.6325, 'Avg Precision': 0.6718,
+'Accuracy': 0.5996, 'F1': 0.6555\}
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{17}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Figure 3: LR per\PYZhy{}fold CV ROC\PYZhy{}AUC vs C}
+\PY{n}{cv\PYZus{}df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{n}{lr\PYZus{}search}\PY{o}{.}\PY{n}{cv\PYZus{}results\PYZus{}}\PY{p}{)}
+\PY{n}{C\PYZus{}vals} \PY{o}{=} \PY{n}{cv\PYZus{}df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{param\PYZus{}C}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{float}\PY{p}{)}\PY{o}{.}\PY{n}{values}
+\PY{n}{fold\PYZus{}colors} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}1f77b4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}ff7f0e}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}2ca02c}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}d62728}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}9467bd}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+
+\PY{n}{fig}\PY{p}{,} \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{7}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}
+\PY{k}{for} \PY{n}{fold}\PY{p}{,} \PY{n}{color} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{fold\PYZus{}colors}\PY{p}{)}\PY{p}{:}
+    \PY{n}{scores} \PY{o}{=} \PY{n}{cv\PYZus{}df}\PY{p}{[}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{split}\PY{l+s+si}{\PYZob{}}\PY{n}{fold}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZus{}test\PYZus{}score}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{C\PYZus{}vals}\PY{p}{,} \PY{n}{scores}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{markersize}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,}
+            \PY{n}{color}\PY{o}{=}\PY{n}{color}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mf}{1.5}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Fold }\PY{l+s+si}{\PYZob{}}\PY{n}{fold}\PY{o}{+}\PY{l+m+mi}{1}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{mean\PYZus{}scores} \PY{o}{=} \PY{n}{cv\PYZus{}df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{mean\PYZus{}test\PYZus{}score}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{values}
+\PY{n}{ax}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{C\PYZus{}vals}\PY{p}{,} \PY{n}{mean\PYZus{}scores}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{markersize}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,}
+        \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{black}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mean CV}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{axvline}\PY{p}{(}\PY{n}{best\PYZus{}C}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{red}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mf}{1.2}\PY{p}{,}
+           \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Best C = }\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}C}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xscale}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{log}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Regularisation Strength C (log scale)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ROC\PYZhy{}AUC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Figure 3: Logistic Regression — Per\PYZhy{}Fold CV ROC\PYZhy{}AUC vs C}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{8}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.3}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{B300238_B296110_MachineLearninginPython_ICA_files/B300238_B296110_MachineLearninginPython_ICA_39_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \textbf{Figure 3.} Per-fold cross-validation ROC-AUC for Logistic
+Regression across six regularisation strengths C (log scale). The five
+coloured lines represent individual CV folds, the black dashed line
+shows the mean CV ROC-AUC across folds, the red dashed vertical line
+marks the selected value of C. Fold scores cluster tightly at each C
+value, indicating stable generalisation across training partitions.
+
+    \hypertarget{final-model-random-forest}{%
+\subsection{3.3 Final Model: Random
+Forest}\label{final-model-random-forest}}
+
+Random Forest {[}9{]} is selected as the final model for the following
+reasons. Firstly, it constructs an ensemble of decision trees that
+captures non-linear relationships and feature interactions that Logistic
+Regression cannot represent, which given the complex socioeconomic and
+familial determinants of childhood depression, such non-linear effects
+are expected. Secondly, it is naturally robust to the multicollinearity
+(Figure 2): individual trees are trained on bootstrap samples and random
+feature subsets, so correlated predictors do not destabilise the
+ensemble.
+
+\textbf{Hyperparameter strategy:} Three hyperparameters are tuned via
+five-fold stratified cross-validation on the training set, with ROC-AUC
+as the scoring criterion. Each hyperparameter is swept independently
+while the remaining two are held at sensible anchor values, and the
+value yielding the highest mean CV ROC-AUC is selected:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{n\_estimators}: 50, 100, 200, 300 (anchor value), 400, 500
+\item
+  \texttt{max\_depth}: 4, 6, 8, 10, 12, unlimited (anchor value)
+\item
+  \texttt{min\_samples\_leaf}: 1 (anchor value), 2, 5, 10, 20
+\end{itemize}
+
+\texttt{max\_features=\textquotesingle{}sqrt\textquotesingle{}}
+(standard for classification) is fixed throughout. The test set is not
+consulted at any stage of hyperparameter selection. It is acknowledged
+that sweeping each hyperparameter independently does not account for
+potential interactions between them. A full grid search was considered
+but ruled out on computational grounds given the size of the feature
+matrix.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{18}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Random Forest — independent per\PYZhy{}hyperparameter CV sweeps on training set}
+\PY{n}{skf\PYZus{}rf} \PY{o}{=} \PY{n}{StratifiedKFold}\PY{p}{(}\PY{n}{n\PYZus{}splits}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,} \PY{n}{shuffle}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{n}{RANDOM\PYZus{}STATE}\PY{p}{)}
+\PY{n}{fold\PYZus{}colors} \PY{o}{=} \PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}1f77b4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}ff7f0e}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}2ca02c}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}d62728}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsh{}9467bd}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} Hyperparameter ranges to explore}
+\PY{n}{n\PYZus{}est\PYZus{}vals} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{50}\PY{p}{,} \PY{l+m+mi}{100}\PY{p}{,} \PY{l+m+mi}{200}\PY{p}{,} \PY{l+m+mi}{300}\PY{p}{,} \PY{l+m+mi}{400}\PY{p}{,} \PY{l+m+mi}{500}\PY{p}{]}
+\PY{n}{depth\PYZus{}vals} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{,} \PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{12}\PY{p}{,} \PY{k+kc}{None}\PY{p}{]}
+\PY{n}{msl\PYZus{}vals} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{20}\PY{p}{]}
+
+\PY{c+c1}{\PYZsh{} Anchor values held fixed when sweeping other parameters}
+\PY{n}{ANCHOR\PYZus{}N\PYZus{}EST} \PY{o}{=} \PY{l+m+mi}{300}
+\PY{n}{ANCHOR\PYZus{}DEPTH} \PY{o}{=} \PY{k+kc}{None}
+\PY{n}{ANCHOR\PYZus{}MSL} \PY{o}{=} \PY{l+m+mi}{1}
+
+\PY{k}{def}\PY{+w}{ }\PY{n+nf}{sweep\PYZus{}cv\PYZus{}scores}\PY{p}{(}\PY{n}{param\PYZus{}vals}\PY{p}{,} \PY{n}{param\PYZus{}name}\PY{p}{,} \PY{n}{base\PYZus{}kwargs}\PY{p}{)}\PY{p}{:}
+\PY{+w}{    }\PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{}For each value in param\PYZus{}vals, run 5\PYZhy{}fold CV and return per\PYZhy{}fold ROC\PYZhy{}AUC scores.\PYZdq{}\PYZdq{}\PYZdq{}}
+    \PY{n}{results} \PY{o}{=} \PY{p}{\PYZob{}}\PY{p}{\PYZcb{}}
+    \PY{k}{for} \PY{n}{val} \PY{o+ow}{in} \PY{n}{param\PYZus{}vals}\PY{p}{:}
+        \PY{n}{kwargs} \PY{o}{=} \PY{p}{\PYZob{}}\PY{o}{*}\PY{o}{*}\PY{n}{base\PYZus{}kwargs}\PY{p}{,} \PY{n}{param\PYZus{}name}\PY{p}{:} \PY{n}{val}\PY{p}{\PYZcb{}}
+        \PY{n}{rf\PYZus{}cv}  \PY{o}{=} \PY{n}{RandomForestClassifier}\PY{p}{(}\PY{n}{random\PYZus{}state}\PY{o}{=}\PY{n}{RANDOM\PYZus{}STATE}\PY{p}{,} \PY{n}{n\PYZus{}jobs}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{*}\PY{o}{*}\PY{n}{kwargs}\PY{p}{)}
+        \PY{n}{scores} \PY{o}{=} \PY{n}{cross\PYZus{}val\PYZus{}score}\PY{p}{(}
+            \PY{n}{rf\PYZus{}cv}\PY{p}{,} \PY{n}{X\PYZus{}train\PYZus{}proc}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{,}
+            \PY{n}{cv}\PY{o}{=}\PY{n}{skf\PYZus{}rf}\PY{p}{,} \PY{n}{scoring}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{roc\PYZus{}auc}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{n\PYZus{}jobs}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
+        \PY{p}{)}
+        \PY{n}{results}\PY{p}{[}\PY{n}{val}\PY{p}{]} \PY{o}{=} \PY{n}{scores}
+        \PY{n}{lbl} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{None}\PY{l+s+s1}{\PYZsq{}} \PY{k}{if} \PY{n}{val} \PY{o+ow}{is} \PY{k+kc}{None} \PY{k}{else} \PY{n}{val}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  }\PY{l+s+si}{\PYZob{}}\PY{n}{param\PYZus{}name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{=}\PY{l+s+si}{\PYZob{}}\PY{n+nb}{str}\PY{p}{(}\PY{n}{lbl}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{\PYZgt{}6}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{  mean CV AUC=}\PY{l+s+si}{\PYZob{}}\PY{n}{scores}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{  }\PY{l+s+s2}{\PYZdq{}}
+              \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{folds=}\PY{l+s+si}{\PYZob{}}\PY{n}{scores}\PY{o}{.}\PY{n}{round}\PY{p}{(}\PY{l+m+mi}{4}\PY{p}{)}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+    \PY{k}{return} \PY{n}{results}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{=== Sweeping n\PYZus{}estimators (anchor: max\PYZus{}depth=None, min\PYZus{}samples\PYZus{}leaf=1) ===}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{n\PYZus{}est\PYZus{}scores} \PY{o}{=} \PY{n}{sweep\PYZus{}cv\PYZus{}scores}\PY{p}{(}
+    \PY{n}{n\PYZus{}est\PYZus{}vals}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n\PYZus{}estimators}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n+nb}{dict}\PY{p}{(}\PY{n}{max\PYZus{}depth}\PY{o}{=}\PY{n}{ANCHOR\PYZus{}DEPTH}\PY{p}{,} \PY{n}{min\PYZus{}samples\PYZus{}leaf}\PY{o}{=}\PY{n}{ANCHOR\PYZus{}MSL}\PY{p}{,} \PY{n}{max\PYZus{}features}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sqrt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{=== Sweeping max\PYZus{}depth (anchor: n\PYZus{}estimators=300, min\PYZus{}samples\PYZus{}leaf=1) ===}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{depth\PYZus{}scores} \PY{o}{=} \PY{n}{sweep\PYZus{}cv\PYZus{}scores}\PY{p}{(}
+    \PY{n}{depth\PYZus{}vals}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{max\PYZus{}depth}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n+nb}{dict}\PY{p}{(}\PY{n}{n\PYZus{}estimators}\PY{o}{=}\PY{n}{ANCHOR\PYZus{}N\PYZus{}EST}\PY{p}{,} \PY{n}{min\PYZus{}samples\PYZus{}leaf}\PY{o}{=}\PY{n}{ANCHOR\PYZus{}MSL}\PY{p}{,} \PY{n}{max\PYZus{}features}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sqrt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{=== Sweeping min\PYZus{}samples\PYZus{}leaf (anchor: n\PYZus{}estimators=300, max\PYZus{}depth=None) ===}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{msl\PYZus{}scores} \PY{o}{=} \PY{n}{sweep\PYZus{}cv\PYZus{}scores}\PY{p}{(}
+    \PY{n}{msl\PYZus{}vals}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{min\PYZus{}samples\PYZus{}leaf}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n+nb}{dict}\PY{p}{(}\PY{n}{n\PYZus{}estimators}\PY{o}{=}\PY{n}{ANCHOR\PYZus{}N\PYZus{}EST}\PY{p}{,} \PY{n}{max\PYZus{}depth}\PY{o}{=}\PY{n}{ANCHOR\PYZus{}DEPTH}\PY{p}{,} \PY{n}{max\PYZus{}features}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sqrt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Select best value per hyperparameter (highest mean CV ROC\PYZhy{}AUC)}
+\PY{n}{best\PYZus{}n\PYZus{}est} \PY{o}{=} \PY{n+nb}{max}\PY{p}{(}\PY{n}{n\PYZus{}est\PYZus{}vals}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{k}{lambda} \PY{n}{v}\PY{p}{:} \PY{n}{n\PYZus{}est\PYZus{}scores}\PY{p}{[}\PY{n}{v}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n}{best\PYZus{}depth} \PY{o}{=} \PY{n+nb}{max}\PY{p}{(}\PY{n}{depth\PYZus{}vals}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{k}{lambda} \PY{n}{v}\PY{p}{:} \PY{n}{depth\PYZus{}scores}\PY{p}{[}\PY{n}{v}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\PY{n}{best\PYZus{}msl} \PY{o}{=} \PY{n+nb}{max}\PY{p}{(}\PY{n}{msl\PYZus{}vals}\PY{p}{,} \PY{n}{key}\PY{o}{=}\PY{k}{lambda} \PY{n}{v}\PY{p}{:} \PY{n}{msl\PYZus{}scores}\PY{p}{[}\PY{n}{v}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s2}{Selected hyperparameters (highest mean CV ROC\PYZhy{}AUC):}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  n\PYZus{}estimators    = }\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}n\PYZus{}est}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{  }\PY{l+s+s2}{\PYZdq{}}
+      \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{(mean CV AUC: }\PY{l+s+si}{\PYZob{}}\PY{n}{n\PYZus{}est\PYZus{}scores}\PY{p}{[}\PY{n}{best\PYZus{}n\PYZus{}est}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  max\PYZus{}depth       = }\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}depth}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{  }\PY{l+s+s2}{\PYZdq{}}
+      \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{(mean CV AUC: }\PY{l+s+si}{\PYZob{}}\PY{n}{depth\PYZus{}scores}\PY{p}{[}\PY{n}{best\PYZus{}depth}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{  min\PYZus{}samples\PYZus{}leaf= }\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}msl}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{   }\PY{l+s+s2}{\PYZdq{}}
+      \PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{(mean CV AUC: }\PY{l+s+si}{\PYZob{}}\PY{n}{msl\PYZus{}scores}\PY{p}{[}\PY{n}{best\PYZus{}msl}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)}\PY{l+s+si}{:}\PY{l+s+s2}{.4f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{)}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+=== Sweeping n\_estimators (anchor: max\_depth=None, min\_samples\_leaf=1) ===
+  n\_estimators=    50  mean CV AUC=0.6248  folds=[0.6223 0.6352 0.618  0.6247
+0.6235]
+  n\_estimators=   100  mean CV AUC=0.6398  folds=[0.6402 0.648  0.6279 0.639
+0.6438]
+  n\_estimators=   200  mean CV AUC=0.6486  folds=[0.6443 0.6674 0.6305 0.6504
+0.6504]
+  n\_estimators=   300  mean CV AUC=0.6511  folds=[0.6488 0.6661 0.6309 0.6573
+0.6523]
+  n\_estimators=   400  mean CV AUC=0.6535  folds=[0.6536 0.6696 0.6324 0.6584
+0.6535]
+  n\_estimators=   500  mean CV AUC=0.6535  folds=[0.6525 0.6694 0.6327 0.6602
+0.653 ]
+
+=== Sweeping max\_depth (anchor: n\_estimators=300, min\_samples\_leaf=1) ===
+  max\_depth=     4  mean CV AUC=0.6398  folds=[0.6336 0.6619 0.6199 0.653
+0.6305]
+  max\_depth=     6  mean CV AUC=0.6456  folds=[0.6433 0.6656 0.6239 0.6552
+0.6397]
+  max\_depth=     8  mean CV AUC=0.6493  folds=[0.6469 0.6708 0.6265 0.6593 0.643
+]
+  max\_depth=    10  mean CV AUC=0.6505  folds=[0.6522 0.6716 0.6256 0.6597
+0.6433]
+  max\_depth=    12  mean CV AUC=0.6543  folds=[0.6514 0.6754 0.6328 0.6637
+0.6481]
+  max\_depth=  None  mean CV AUC=0.6511  folds=[0.6488 0.6661 0.6309 0.6573
+0.6523]
+
+=== Sweeping min\_samples\_leaf (anchor: n\_estimators=300, max\_depth=None) ===
+  min\_samples\_leaf=     1  mean CV AUC=0.6511  folds=[0.6488 0.6661 0.6309
+0.6573 0.6523]
+  min\_samples\_leaf=     2  mean CV AUC=0.6543  folds=[0.659  0.675  0.6286
+0.6641 0.6448]
+  min\_samples\_leaf=     5  mean CV AUC=0.6539  folds=[0.6572 0.6748 0.6305
+0.6619 0.6452]
+  min\_samples\_leaf=    10  mean CV AUC=0.6545  folds=[0.6549 0.6803 0.6297
+0.6592 0.6483]
+  min\_samples\_leaf=    20  mean CV AUC=0.6513  folds=[0.6505 0.675  0.6296
+0.6587 0.6428]
+
+Selected hyperparameters (highest mean CV ROC-AUC):
+  n\_estimators    = 500  (mean CV AUC: 0.6535)
+  max\_depth       = 12  (mean CV AUC: 0.6543)
+  min\_samples\_leaf= 10   (mean CV AUC: 0.6545)
+    \end{Verbatim}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{19}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Figure 4: RF per\PYZhy{}fold CV ROC\PYZhy{}AUC vs each hyperparameter (3\PYZhy{}panel)}
+\PY{n}{x\PYZus{}n\PYZus{}est} \PY{o}{=} \PY{p}{[}\PY{n+nb}{str}\PY{p}{(}\PY{n}{v}\PY{p}{)} \PY{k}{for} \PY{n}{v} \PY{o+ow}{in} \PY{n}{n\PYZus{}est\PYZus{}vals}\PY{p}{]}
+\PY{n}{x\PYZus{}depth} \PY{o}{=} \PY{p}{[}\PY{n+nb}{str}\PY{p}{(}\PY{n}{d}\PY{p}{)} \PY{k}{if} \PY{n}{d} \PY{o+ow}{is} \PY{o+ow}{not} \PY{k+kc}{None} \PY{k}{else} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{None}\PY{l+s+s1}{\PYZsq{}} \PY{k}{for} \PY{n}{d} \PY{o+ow}{in} \PY{n}{depth\PYZus{}vals}\PY{p}{]}
+\PY{n}{x\PYZus{}msl} \PY{o}{=} \PY{p}{[}\PY{n+nb}{str}\PY{p}{(}\PY{n}{v}\PY{p}{)} \PY{k}{for} \PY{n}{v} \PY{o+ow}{in} \PY{n}{msl\PYZus{}vals}\PY{p}{]}
+
+\PY{n}{best\PYZus{}depth\PYZus{}label} \PY{o}{=} \PY{n+nb}{str}\PY{p}{(}\PY{n}{best\PYZus{}depth}\PY{p}{)} \PY{k}{if} \PY{n}{best\PYZus{}depth} \PY{o+ow}{is} \PY{o+ow}{not} \PY{k+kc}{None} \PY{k}{else} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{None}\PY{l+s+s1}{\PYZsq{}}
+
+\PY{n}{sweep\PYZus{}specs} \PY{o}{=} \PY{p}{[}
+    \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(A)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{n\PYZus{}estimators}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x\PYZus{}n\PYZus{}est}\PY{p}{,} \PY{n}{n\PYZus{}est\PYZus{}vals}\PY{p}{,} \PY{n}{n\PYZus{}est\PYZus{}scores}\PY{p}{,} \PY{n+nb}{str}\PY{p}{(}\PY{n}{best\PYZus{}n\PYZus{}est}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+    \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(B)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{max\PYZus{}depth}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x\PYZus{}depth}\PY{p}{,} \PY{n}{depth\PYZus{}vals}\PY{p}{,} \PY{n}{depth\PYZus{}scores}\PY{p}{,} \PY{n}{best\PYZus{}depth\PYZus{}label}\PY{p}{)}\PY{p}{,}
+    \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(C)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{min\PYZus{}samples\PYZus{}leaf}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{x\PYZus{}msl}\PY{p}{,} \PY{n}{msl\PYZus{}vals}\PY{p}{,} \PY{n}{msl\PYZus{}scores}\PY{p}{,} \PY{n+nb}{str}\PY{p}{(}\PY{n}{best\PYZus{}msl}\PY{p}{)}\PY{p}{)}
+\PY{p}{]}
+
+\PY{n}{fig}\PY{p}{,} \PY{n}{axes} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{18}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}\PY{p}{,} \PY{n}{sharey}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\PY{k}{for} \PY{n}{ax}\PY{p}{,} \PY{p}{(}\PY{n}{panel}\PY{p}{,} \PY{n}{pname}\PY{p}{,} \PY{n}{xlabels}\PY{p}{,} \PY{n}{pvals}\PY{p}{,} \PY{n}{scores\PYZus{}dict}\PY{p}{,} \PY{n}{best\PYZus{}lbl}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{zip}\PY{p}{(}\PY{n}{axes}\PY{p}{,} \PY{n}{sweep\PYZus{}specs}\PY{p}{)}\PY{p}{:}
+    \PY{k}{for} \PY{n}{fold\PYZus{}i}\PY{p}{,} \PY{n}{color} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{fold\PYZus{}colors}\PY{p}{)}\PY{p}{:}
+        \PY{n}{fold\PYZus{}scores} \PY{o}{=} \PY{p}{[}\PY{n}{scores\PYZus{}dict}\PY{p}{[}\PY{n}{v}\PY{p}{]}\PY{p}{[}\PY{n}{fold\PYZus{}i}\PY{p}{]} \PY{k}{for} \PY{n}{v} \PY{o+ow}{in} \PY{n}{pvals}\PY{p}{]}
+        \PY{n}{ax}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{xlabels}\PY{p}{,} \PY{n}{fold\PYZus{}scores}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{o}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{markersize}\PY{o}{=}\PY{l+m+mi}{4}\PY{p}{,}
+                \PY{n}{color}\PY{o}{=}\PY{n}{color}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mf}{1.5}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Fold }\PY{l+s+si}{\PYZob{}}\PY{n}{fold\PYZus{}i}\PY{o}{+}\PY{l+m+mi}{1}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{means} \PY{o}{=} \PY{p}{[}\PY{n}{scores\PYZus{}dict}\PY{p}{[}\PY{n}{v}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{p}{)} \PY{k}{for} \PY{n}{v} \PY{o+ow}{in} \PY{n}{pvals}\PY{p}{]}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{xlabels}\PY{p}{,} \PY{n}{means}\PY{p}{,} \PY{n}{marker}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{s}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{markersize}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,}
+            \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{black}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mean CV}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{best\PYZus{}idx} \PY{o}{=} \PY{n}{xlabels}\PY{o}{.}\PY{n}{index}\PY{p}{(}\PY{n}{best\PYZus{}lbl}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{axvline}\PY{p}{(}\PY{n}{best\PYZus{}idx}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{red}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linestyle}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mf}{1.2}\PY{p}{,}
+               \PY{n}{label}\PY{o}{=}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Selected: }\PY{l+s+si}{\PYZob{}}\PY{n}{best\PYZus{}lbl}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{n}{pname}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ROC\PYZhy{}AUC}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{panel}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{ ROC\PYZhy{}AUC vs }\PY{l+s+si}{\PYZob{}}\PY{n}{pname}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.3}\PY{p}{)}
+    \PY{n}{ax}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{7}\PY{p}{)}
+
+\PY{n}{fig}\PY{o}{.}\PY{n}{suptitle}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Figure 4: Random Forest — Per\PYZhy{}Fold CV ROC\PYZhy{}AUC vs Hyperparameters}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+             \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{B300238_B296110_MachineLearninginPython_ICA_files/B300238_B296110_MachineLearninginPython_ICA_43_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \textbf{Figure 4.} Per-fold cross-validation ROC-AUC for the Random
+Forest as a function of each tuned hyperparameter (five coloured fold
+lines, black dashed = mean CV ROC-AUC, red dashed vertical = selected
+value). Each panel sweeps one hyperparameter while the remaining two are
+fixed at their anchor values. \textbf{(A)} \texttt{n\_estimators}: mean
+CV ROC-AUC stabilises beyond approximately 200 trees, confirming
+diminishing returns from adding further trees. The selected value
+balances stability against computational cost. \textbf{(B)}
+\texttt{max\_depth}: performance increases monotonically with depth.
+\texttt{max\_depth=12} is selected in preference because it constrains
+tree growth, providing a modest regularisation benefit without
+sacrificing discriminative performance. \textbf{(C)}
+\texttt{min\_samples\_leaf}: mean CV ROC-AUC is relatively stable across
+the range tested, confirming that the optimal setting lies in a flat
+region of the performance surface and that results are not sensitive to
+the precise value chosen within this neighbourhood.
+
+    \hypertarget{final-model-evaluation-on-test-set}{%
+\subsection{3.4 Final Model Evaluation on Test
+Set}\label{final-model-evaluation-on-test-set}}
+
+The tuned Random Forest is refit on the full training set using the
+hyperparameters selected via cross-validation. Both models are then
+evaluated on the held-out test set. This is the definitive performance
+comparison between the baseline Logistic Regression and the final Random
+Forest model.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{20}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Fit final RF on training set with CV\PYZhy{}selected hyperparameters}
+\PY{n}{final\PYZus{}rf} \PY{o}{=} \PY{n}{RandomForestClassifier}\PY{p}{(}
+    \PY{n}{n\PYZus{}estimators}\PY{o}{=}\PY{n}{best\PYZus{}n\PYZus{}est}\PY{p}{,}
+    \PY{n}{max\PYZus{}depth}\PY{o}{=}\PY{n}{best\PYZus{}depth}\PY{p}{,}
+    \PY{n}{min\PYZus{}samples\PYZus{}leaf}\PY{o}{=}\PY{n}{best\PYZus{}msl}\PY{p}{,}
+    \PY{n}{max\PYZus{}features}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sqrt}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{n}{RANDOM\PYZus{}STATE}\PY{p}{,}
+    \PY{n}{n\PYZus{}jobs}\PY{o}{=}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}
+\PY{p}{)}
+\PY{n}{final\PYZus{}rf}\PY{o}{.}\PY{n}{fit}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}proc}\PY{p}{,} \PY{n}{y\PYZus{}train}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Evaluate both models on TEST set}
+\PY{n}{rf\PYZus{}proba\PYZus{}test} \PY{o}{=} \PY{n}{final\PYZus{}rf}\PY{o}{.}\PY{n}{predict\PYZus{}proba}\PY{p}{(}\PY{n}{X\PYZus{}test\PYZus{}proc}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{rf\PYZus{}pred\PYZus{}test} \PY{o}{=} \PY{n}{final\PYZus{}rf}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{X\PYZus{}test\PYZus{}proc}\PY{p}{)}
+
+\PY{n}{rf\PYZus{}results\PYZus{}test} \PY{o}{=} \PY{n}{evaluate\PYZus{}model}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{,} \PY{n}{rf\PYZus{}proba\PYZus{}test}\PY{p}{,} \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Random Forest (test)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{=== Final Test Set Results ===}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\PY{n}{results\PYZus{}df} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{DataFrame}\PY{p}{(}\PY{p}{[}\PY{n}{lr\PYZus{}results\PYZus{}test}\PY{p}{,} \PY{n}{rf\PYZus{}results\PYZus{}test}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{set\PYZus{}index}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Model}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n+nb}{print}\PY{p}{(}\PY{n}{results\PYZus{}df}\PY{o}{.}\PY{n}{to\PYZus{}string}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+=== Final Test Set Results ===
+                      ROC-AUC  Avg Precision  Accuracy      F1
+Model
+LR (test)              0.6325         0.6718    0.5996  0.6555
+Random Forest (test)   0.6418         0.6790    0.6027  0.6832
+    \end{Verbatim}
+
+    Both models demonstrate genuine discriminative ability above chance
+(ROC-AUC \textgreater{} 0.5, Average Precision substantially above the
+no-skill baseline, which equals the positive class prevalence). The
+Random Forest outperforms Logistic Regression across all four metrics,
+with the largest absolute gain in F1 (0.683 vs 0.656), reflecting its
+markedly higher sensitivity at the default 0.5 decision threshold. Both
+models' moderate absolute performance is attributable to the inherent
+data ceiling (Figure 9).
+
+    \hypertarget{interpretation-discussion-and-conclusions}{%
+\section{4. Interpretation, Discussion and
+Conclusions}\label{interpretation-discussion-and-conclusions}}
+
+    \hypertarget{feature-importances}{%
+\subsection{4.1 Feature Importances}\label{feature-importances}}
+
+Mean Decrease in Impurity (MDI) importances from the final Random Forest
+quantify the average reduction in node impurity (Gini) achieved by each
+feature across all trees. Higher values indicate features that
+consistently provide better splits, accounting for both main effects and
+interactions. Human-readable labels are assigned to aid policy
+communication.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{21}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Figure 5: RF feature importances (top 20) and LR standardised coefficients}
+\PY{n}{LABEL\PYZus{}MAP} \PY{o}{=} \PY{p}{\PYZob{}}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}CB3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Child Age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}wscore}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wealth Score}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}WB4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Mother}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{s Age}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}CSURV}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Surviving Children}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}CDEAD}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Deceased Children}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}CL2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Child Engages in Labour}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}CL12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Child Does Household Work}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}total\PYZus{}children}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Total Children (eng.)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}child\PYZus{}labour\PYZus{}flag}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Labour Flag (eng.)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}wealth\PYZus{}age}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Wealth × Age (eng.)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}discipline\PYZus{}score}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Discipline Score (eng.)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}CL13}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Child Labour Hours}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}LS2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Life Satisfaction Score}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}MA2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Husband}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{s Age}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}WS4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Water Collection Time}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord\PYZus{}\PYZus{}LS1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Mother}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{s Life Satisfaction}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord\PYZus{}\PYZus{}LS3}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Life vs 1 Year Ago}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord\PYZus{}\PYZus{}LS4}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Life vs 1 Year Ahead}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord\PYZus{}\PYZus{}WB14}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Mother}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{s Literacy}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord\PYZus{}\PYZus{}WB6A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Mother}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{s Education Level}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord\PYZus{}\PYZus{}WB6B}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Mother}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{s Education Grade}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord\PYZus{}\PYZus{}CB5A}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Child}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{s School Level}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord\PYZus{}\PYZus{}CB5B}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Child}\PY{l+s+s2}{\PYZsq{}}\PY{l+s+s2}{s Grade}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord\PYZus{}\PYZus{}AF10}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mother: Memory Difficulty}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord\PYZus{}\PYZus{}AF11}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mother: Self\PYZhy{}Care Difficulty}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord\PYZus{}\PYZus{}AF12}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mother: Communication Difficulty}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord\PYZus{}\PYZus{}VT20}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Safety: Night Walk (Mother)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord\PYZus{}\PYZus{}VT21}\PY{l+s+s1}{\PYZsq{}}\PY{p}{:} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Safety: Night Walk (Child)}\PY{l+s+s1}{\PYZsq{}}
+\PY{p}{\PYZcb{}}
+
+\PY{n}{importances} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{Series}\PY{p}{(}
+    \PY{n}{final\PYZus{}rf}\PY{o}{.}\PY{n}{feature\PYZus{}importances\PYZus{}}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{n}{feature\PYZus{}names\PYZus{}final}
+\PY{p}{)}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{n}{ascending}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\PY{n}{top20} \PY{o}{=} \PY{n}{importances}\PY{o}{.}\PY{n}{head}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{)}
+\PY{n}{labels\PYZus{}20} \PY{o}{=} \PY{p}{[}\PY{n}{LABEL\PYZus{}MAP}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{n}{f}\PY{p}{,} \PY{n}{f}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nom\PYZus{}\PYZus{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord\PYZus{}\PYZus{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+              \PY{k}{for} \PY{n}{f} \PY{o+ow}{in} \PY{n}{top20}\PY{o}{.}\PY{n}{index}\PY{p}{]}
+
+\PY{n}{coef\PYZus{}series} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{Series}\PY{p}{(}\PY{n}{best\PYZus{}lr}\PY{o}{.}\PY{n}{coef\PYZus{}}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{index}\PY{o}{=}\PY{n}{feature\PYZus{}names\PYZus{}final}\PY{p}{)}
+\PY{n}{top\PYZus{}pos} \PY{o}{=} \PY{n}{coef\PYZus{}series}\PY{o}{.}\PY{n}{nlargest}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{top\PYZus{}neg} \PY{o}{=} \PY{n}{coef\PYZus{}series}\PY{o}{.}\PY{n}{nsmallest}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}
+\PY{n}{combined\PYZus{}lr} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{concat}\PY{p}{(}\PY{p}{[}\PY{n}{top\PYZus{}neg}\PY{p}{,} \PY{n}{top\PYZus{}pos}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{sort\PYZus{}values}\PY{p}{(}\PY{p}{)}
+\PY{n}{labels\PYZus{}lr} \PY{o}{=} \PY{p}{[}\PY{n}{LABEL\PYZus{}MAP}\PY{o}{.}\PY{n}{get}\PY{p}{(}\PY{n}{f}\PY{p}{,} \PY{n}{f}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{nom\PYZus{}\PYZus{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ord\PYZus{}\PYZus{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{.}\PY{n}{replace}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{num\PYZus{}\PYZus{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{)}
+                \PY{k}{for} \PY{n}{f} \PY{o+ow}{in} \PY{n}{combined\PYZus{}lr}\PY{o}{.}\PY{n}{index}\PY{p}{]}
+\PY{n}{colors\PYZus{}lr} \PY{o}{=} \PY{p}{[}\PY{n}{ORANGE} \PY{k}{if} \PY{n}{v} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{k}{else} \PY{n}{BLUE} \PY{k}{for} \PY{n}{v} \PY{o+ow}{in} \PY{n}{combined\PYZus{}lr}\PY{o}{.}\PY{n}{values}\PY{p}{]}
+
+\PY{n}{fig}\PY{p}{,} \PY{p}{(}\PY{n}{ax1}\PY{p}{,} \PY{n}{ax2}\PY{p}{)} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{13}\PY{p}{,} \PY{l+m+mi}{9}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Panel A — RF importances}
+\PY{n}{colors\PYZus{}imp} \PY{o}{=} \PY{n}{sns}\PY{o}{.}\PY{n}{color\PYZus{}palette}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Oranges\PYZus{}d}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{top20}\PY{p}{)}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{ax1}\PY{o}{.}\PY{n}{barh}\PY{p}{(}\PY{n}{labels\PYZus{}20}\PY{p}{[}\PY{p}{:}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{top20}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{p}{:}\PY{p}{:}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{n}{colors\PYZus{}imp}\PY{p}{,} \PY{n}{edgecolor}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{white}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax1}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Mean Decrease in Impurity (Feature Importance)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax1}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(A) Random Forest — Top 20 Feature Importances (MDI)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Panel B — LR coefficients}
+\PY{n}{ax2}\PY{o}{.}\PY{n}{barh}\PY{p}{(}\PY{n}{labels\PYZus{}lr}\PY{p}{,} \PY{n}{combined\PYZus{}lr}\PY{o}{.}\PY{n}{values}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{n}{colors\PYZus{}lr}\PY{p}{,} \PY{n}{edgecolor}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{white}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax2}\PY{o}{.}\PY{n}{axvline}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{black}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mf}{0.8}\PY{p}{)}
+\PY{n}{ax2}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Standardised Logistic Regression Coefficient}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax2}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(B) Top 10 Positive and Negative LR Coefficients}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{fig}\PY{o}{.}\PY{n}{suptitle}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Figure 5: Model Interpretability — RF Importances and LR Coefficients}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+             \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{B300238_B296110_MachineLearninginPython_ICA_files/B300238_B296110_MachineLearninginPython_ICA_50_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \textbf{Figure 5.} Model interpretability outputs for both classifiers.
+\textbf{(A)} Top 20 MDI feature importances from the tuned Random
+Forest. Wealth Score and the Wealth × Age interaction rank among the top
+predictors, confirming material deprivation as a central risk factor.
+Mother's Age, Surviving Children, and Mother's Life Satisfaction appear
+consistently in the upper tier, consistent with intergenerational
+transmission of maternal well-being {[}2{]}. Discipline Harshness Score,
+child labour variables, and household infrastructure indicators reflect
+correlated poverty pathways {[}5{]}. \textbf{(B)} Top 10 positive
+(orange, risk-increasing) and negative (blue, protective) standardised
+Logistic Regression coefficients.
+
+Agreement between panels supports a finding as robust, while divergence
+signals non-linearity or multicollinearity. Socioeconomic and maternal
+well-being variables are prominent in both, confirming their
+reliability. Where they diverge: Wealth Score is absent from the LR
+top-10 because its coefficient is diluted by collinearity with Wealth ×
+Age (Figure 2). Individual harsh discipline items (e.g.~FCD2H, FCD2E)
+appear in LR but are absorbed into the composite
+\texttt{discipline\_score} in the RF ranking.
+
+    \hypertarget{roc-and-precision-recall-curves}{%
+\subsection{4.2 ROC and Precision-Recall
+Curves}\label{roc-and-precision-recall-curves}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{22}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Figures 6–7: ROC and PR curves}
+\PY{n}{fig}\PY{p}{,} \PY{n}{axes} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{13}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Figure 6 — ROC}
+\PY{n}{ax} \PY{o}{=} \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+\PY{n}{RocCurveDisplay}\PY{o}{.}\PY{n}{from\PYZus{}predictions}\PY{p}{(}
+    \PY{n}{y\PYZus{}test}\PY{p}{,} \PY{n}{lr\PYZus{}proba\PYZus{}test}\PY{p}{,}
+    \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Logistic Regression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{n}{BLUE}\PY{p}{)}
+\PY{n}{RocCurveDisplay}\PY{o}{.}\PY{n}{from\PYZus{}predictions}\PY{p}{(}
+    \PY{n}{y\PYZus{}test}\PY{p}{,} \PY{n}{rf\PYZus{}proba\PYZus{}test}\PY{p}{,}
+    \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Random Forest}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{n}{ORANGE}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{k\PYZhy{}\PYZhy{}}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{linewidth}\PY{o}{=}\PY{l+m+mf}{0.8}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Random classifier (AUC = 0.50)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Figure 6: ROC Curves (Test Set)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{lower right}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{9}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.3}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Figure 7 — PR}
+\PY{n}{ax} \PY{o}{=} \PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+\PY{n}{PrecisionRecallDisplay}\PY{o}{.}\PY{n}{from\PYZus{}predictions}\PY{p}{(}
+    \PY{n}{y\PYZus{}test}\PY{p}{,} \PY{n}{lr\PYZus{}proba\PYZus{}test}\PY{p}{,}
+    \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Logistic Regression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{n}{BLUE}\PY{p}{)}
+\PY{n}{PrecisionRecallDisplay}\PY{o}{.}\PY{n}{from\PYZus{}predictions}\PY{p}{(}
+    \PY{n}{y\PYZus{}test}\PY{p}{,} \PY{n}{rf\PYZus{}proba\PYZus{}test}\PY{p}{,}
+    \PY{n}{name}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Random Forest}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{ax}\PY{p}{,} \PY{n}{color}\PY{o}{=}\PY{n}{ORANGE}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Figure 7: Precision\PYZhy{}Recall Curves (Test Set)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{lower left}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{9}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{True}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.3}\PY{p}{)}
+
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{B300238_B296110_MachineLearninginPython_ICA_files/B300238_B296110_MachineLearninginPython_ICA_53_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \textbf{Figures 6--7.} Evaluation curves for both models on the held-out
+test set. \textbf{(Figure 6)} ROC curves: both models rise modestly
+above the diagonal, confirming genuine discriminative ability. The
+Random Forest achieves modestly higher AUC, though the two curves
+overlap substantially across the mid-range operating region.
+\textbf{(Figure 7)} Precision-Recall curves: both models substantially
+exceed the random-classifier baseline, confirming that the models
+capture real predictive signal. The elevated precision at very low
+recall (top-left region) indicates that each model can confidently
+identify a small, high-risk subset, which is a practically important
+property for a resource-constrained screening programme where only a
+limited number of referrals can be processed.
+
+    \hypertarget{confusion-matrices}{%
+\subsection{4.3 Confusion Matrices}\label{confusion-matrices}}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{23}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Figure 8: Confusion matrices}
+\PY{n}{fig}\PY{p}{,} \PY{n}{axes} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{11}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{)}\PY{p}{)}
+
+\PY{n}{ConfusionMatrixDisplay}\PY{o}{.}\PY{n}{from\PYZus{}predictions}\PY{p}{(}
+    \PY{n}{y\PYZus{}test}\PY{p}{,} \PY{n}{lr\PYZus{}pred\PYZus{}test}\PY{p}{,}
+    \PY{n}{display\PYZus{}labels}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{No Depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+    \PY{n}{ax}\PY{o}{=}\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{colorbar}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Blues}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(A) Logistic Regression — Confusion Matrix (Test Set)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{ConfusionMatrixDisplay}\PY{o}{.}\PY{n}{from\PYZus{}predictions}\PY{p}{(}
+    \PY{n}{y\PYZus{}test}\PY{p}{,} \PY{n}{rf\PYZus{}pred\PYZus{}test}\PY{p}{,}
+    \PY{n}{display\PYZus{}labels}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{No Depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{,}
+    \PY{n}{ax}\PY{o}{=}\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{colorbar}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Oranges}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{axes}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(B) Random Forest — Confusion Matrix (Test Set)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+
+\PY{n}{fig}\PY{o}{.}\PY{n}{suptitle}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Figure 8: Confusion Matrices (Test Set, Default 0.5 Threshold)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+              \PY{n}{fontsize}\PY{o}{=}\PY{l+m+mi}{12}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Print sensitivity and specificity}
+\PY{k+kn}{from}\PY{+w}{ }\PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{metrics}\PY{+w}{ }\PY{k+kn}{import} \PY{n}{confusion\PYZus{}matrix}
+\PY{k}{for} \PY{n}{name}\PY{p}{,} \PY{n}{proba}\PY{p}{,} \PY{n}{pred} \PY{o+ow}{in} \PY{p}{[}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LR}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{lr\PYZus{}proba\PYZus{}test}\PY{p}{,} \PY{n}{lr\PYZus{}pred\PYZus{}test}\PY{p}{)}\PY{p}{,}
+                           \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{RF}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{rf\PYZus{}proba\PYZus{}test}\PY{p}{,} \PY{n}{rf\PYZus{}pred\PYZus{}test}\PY{p}{)}\PY{p}{]}\PY{p}{:}
+    \PY{n}{tn}\PY{p}{,} \PY{n}{fp}\PY{p}{,} \PY{n}{fn}\PY{p}{,} \PY{n}{tp} \PY{o}{=} \PY{n}{confusion\PYZus{}matrix}\PY{p}{(}\PY{n}{y\PYZus{}test}\PY{p}{,} \PY{n}{pred}\PY{p}{)}\PY{o}{.}\PY{n}{ravel}\PY{p}{(}\PY{p}{)}
+    \PY{n}{sens} \PY{o}{=} \PY{n}{tp} \PY{o}{/} \PY{p}{(}\PY{n}{tp} \PY{o}{+} \PY{n}{fn}\PY{p}{)}
+    \PY{n}{spec} \PY{o}{=} \PY{n}{tn} \PY{o}{/} \PY{p}{(}\PY{n}{tn} \PY{o}{+} \PY{n}{fp}\PY{p}{)}
+    \PY{n+nb}{print}\PY{p}{(}\PY{l+s+sa}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+si}{\PYZob{}}\PY{n}{name}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{: Sensitivity=}\PY{l+s+si}{\PYZob{}}\PY{n}{sens}\PY{l+s+si}{:}\PY{l+s+s2}{.3f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{, Specificity=}\PY{l+s+si}{\PYZob{}}\PY{n}{spec}\PY{l+s+si}{:}\PY{l+s+s2}{.3f}\PY{l+s+si}{\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{B300238_B296110_MachineLearninginPython_ICA_files/B300238_B296110_MachineLearninginPython_ICA_56_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+LR: Sensitivity=0.697, Specificity=0.482
+RF: Sensitivity=0.784, Specificity=0.384
+    \end{Verbatim}
+
+    \textbf{Figure 8.} Confusion matrices at the default 0.5 classification
+threshold for both models on the test set. \textbf{(A)} Logistic
+Regression achieves lower sensitivity (0.697) and higher specificity
+(0.482) relative to the Random Forest. \textbf{(B)} Random Forest
+achieves higher sensitivity (0.784 vs 0.697) at the cost of lower
+specificity (0.384 vs 0.482). In a population screening context, this
+trade-off is preferable: missing a depressed child (false negative)
+carries greater harm than an unnecessary referral (false positive).
+
+    \hypertarget{class-separability-diagnostic-umap-projection}{%
+\subsection{4.4 Class-Separability Diagnostic: UMAP
+Projection}\label{class-separability-diagnostic-umap-projection}}
+
+To contextualise the moderate model performance, a UMAP (Uniform
+Manifold Approximation and Projection) {[}10{]} projection of the
+preprocessed training features is shown below. UMAP preserves local
+neighbourhood structure while compressing the high-dimensional feature
+matrix into two dimensions. If the two classes form compact,
+well-separated clusters in this projection, a well-tuned classifier
+should achieve high AUC.
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{24}{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Figure 9: UMAP class\PYZhy{}separability diagnostic}
+\PY{c+c1}{\PYZsh{} A fresh UMAP is fitted on the processed training data for visualisation only.}
+\PY{c+c1}{\PYZsh{} This does not affect any modelling decisions and is shown for diagnostic purposes.}
+
+\PY{n}{reducer} \PY{o}{=} \PY{n}{umap}\PY{o}{.}\PY{n}{UMAP}\PY{p}{(}
+    \PY{n}{n\PYZus{}components}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{n\PYZus{}neighbors}\PY{o}{=}\PY{l+m+mi}{30}\PY{p}{,} \PY{n}{min\PYZus{}dist}\PY{o}{=}\PY{l+m+mf}{0.1}\PY{p}{,}
+    \PY{n}{metric}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{euclidean}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{random\PYZus{}state}\PY{o}{=}\PY{n}{RANDOM\PYZus{}STATE}\PY{p}{,} \PY{n}{n\PYZus{}jobs}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{verbose}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,}
+\PY{p}{)}
+\PY{n}{X\PYZus{}train\PYZus{}clean} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{nan\PYZus{}to\PYZus{}num}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}proc}\PY{p}{,} \PY{n}{nan}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,} \PY{n}{posinf}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{,} \PY{n}{neginf}\PY{o}{=}\PY{l+m+mf}{0.0}\PY{p}{)}
+\PY{n}{X\PYZus{}2d} \PY{o}{=} \PY{n}{reducer}\PY{o}{.}\PY{n}{fit\PYZus{}transform}\PY{p}{(}\PY{n}{X\PYZus{}train\PYZus{}clean}\PY{p}{)}
+
+\PY{c+c1}{\PYZsh{} Subsample 4,000 points for visual clarity (full 8,910 over\PYZhy{}plots)}
+\PY{n}{rng} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{default\PYZus{}rng}\PY{p}{(}\PY{n}{RANDOM\PYZus{}STATE}\PY{p}{)}
+\PY{n}{idx} \PY{o}{=} \PY{n}{rng}\PY{o}{.}\PY{n}{choice}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{X\PYZus{}2d}\PY{p}{)}\PY{p}{,} \PY{n}{size}\PY{o}{=}\PY{n+nb}{min}\PY{p}{(}\PY{l+m+mi}{4000}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{X\PYZus{}2d}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{replace}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+\PY{n}{colors\PYZus{}umap} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{y\PYZus{}train}\PY{o}{.}\PY{n}{values}\PY{p}{[}\PY{n}{idx}\PY{p}{]} \PY{o}{==} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{ORANGE}\PY{p}{,} \PY{n}{BLUE}\PY{p}{)}
+
+\PY{n}{fig}\PY{p}{,} \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{8}\PY{p}{,} \PY{l+m+mi}{6}\PY{p}{)}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{X\PYZus{}2d}\PY{p}{[}\PY{n}{idx}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{X\PYZus{}2d}\PY{p}{[}\PY{n}{idx}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}
+           \PY{n}{c}\PY{o}{=}\PY{n}{colors\PYZus{}umap}\PY{p}{,} \PY{n}{alpha}\PY{o}{=}\PY{l+m+mf}{0.35}\PY{p}{,} \PY{n}{s}\PY{o}{=}\PY{l+m+mi}{6}\PY{p}{,} \PY{n}{linewidths}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\PY{n}{handles} \PY{o}{=} \PY{p}{[}\PY{n}{mpatches}\PY{o}{.}\PY{n}{Patch}\PY{p}{(}\PY{n}{facecolor}\PY{o}{=}\PY{n}{BLUE}\PY{p}{,}   \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{No Depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,}
+           \PY{n}{mpatches}\PY{o}{.}\PY{n}{Patch}\PY{p}{(}\PY{n}{facecolor}\PY{o}{=}\PY{n}{ORANGE}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Depression}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{]}
+\PY{n}{ax}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{n}{handles}\PY{o}{=}\PY{n}{handles}\PY{p}{,} \PY{n}{loc}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{upper right}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}title}\PY{p}{(}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Figure 9: UMAP 2D Projection of Preprocessed Training Features}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}
+    \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{(4,000\PYZhy{}point subsample, diagnostic only)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{UMAP Dimension 1}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{ax}\PY{o}{.}\PY{n}{set\PYZus{}ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{UMAP Dimension 2}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{tight\PYZus{}layout}\PY{p}{(}\PY{p}{)}
+\PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+\end{tcolorbox}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{B300238_B296110_MachineLearninginPython_ICA_files/B300238_B296110_MachineLearninginPython_ICA_59_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \textbf{Figure 9.} UMAP 2D projection of the preprocessed training
+feature matrix (4,000-point random subsample, orange = depressed, blue =
+not depressed). The two classes are thoroughly intermixed throughout the
+projection: there are no compact, class-homogeneous clusters visible,
+and no low-dimensional manifold cleanly separates the two outcomes. This
+is direct visual evidence that the moderate ROC-AUC ceiling
+(\textasciitilde0.63--0.64) is a property of the data, not a modelling
+failure. Depression in children is multiply determined by a complex
+interplay of individual, familial, and contextual factors, many of which
+are absent from any single survey instrument.
+
+    \hypertarget{discussion}{%
+\subsection{4.5 Discussion}\label{discussion}}
+
+The present analysis demonstrates that a principled machine learning
+approach applied to population-level survey data can identify meaningful
+predictors of childhood depression in a sub-Saharan African context.
+Across both models, three broad thematic domains emerge consistently as
+drivers of depression risk.
+
+\textbf{Socioeconomic deprivation:} Household wealth score and the
+Wealth × Age interaction rank as the top two predictors in the Random
+Forest. While these features do not appear in the Logistic Regression
+top-10 coefficients, their effects are absorbed into each other due to
+near-perfect collinearity (r = 0.94) and both models consistently assign
+predictive weight to the wealth domain, confirming material deprivation
+as a central and robust risk factor. Children in low-wealth households
+face a constellation of chronic stressors (food insecurity,
+overcrowding, disrupted schooling, reduced access to healthcare and safe
+play environments) that collectively elevate internalising disorder risk
+{[}2{]}. The Wealth × Age interaction suggests that these effects
+compound with developmental stage: older children have had longer
+cumulative exposure to poverty and are better able to perceive their
+relative disadvantage, increasing vulnerability. Household
+infrastructure variables (water source, flooring, roofing) capture
+additional dimensions of material deprivation and are especially
+relevant in the Malawian context where rural poverty is spatially
+concentrated {[}3{]}. For policymakers, these findings support
+wealth-targeted social protection programmes, such as conditional cash
+transfers, as potential levers for reducing childhood depression at
+population scale.
+
+\textbf{Maternal well-being and family context:} Mother's life
+satisfaction, mother's age, and the total number of children (surviving
+and deceased) appear consistently in the upper tier of both models'
+importance rankings. This pattern is consistent with an
+intergenerational transmission mechanism: maternal psychological
+distress, poor self-reported well-being, and high family burden impair
+caregiving quality, emotional availability, and responsiveness, which in
+turn elevates child depression risk {[}2{]}. The presence of deceased
+children as a predictor may additionally reflect household exposure to
+bereavement and the psychological sequelae of recurrent child mortality,
+a context-specific risk pathway of particular relevance in Malawi, which
+has historically faced high rates of child mortality. These findings
+point toward integrated maternal and child health programmes that
+address maternal mental health not only for its direct benefits but as a
+child protection strategy.
+
+\textbf{Harsh physical discipline:} The engineered discipline harshness
+score and the individual harsh discipline items (shaking, hitting with
+an object) feature prominently across both models. This is consistent
+with the extensive meta-analytic literature documenting a dose-response
+relationship between harsh physical discipline and children's
+internalising symptoms, including depression {[}5{]}. Even when
+controlling for wealth and other household factors, discipline practices
+retain independent predictive value, suggesting that interventions
+targeting parenting behaviour (e.g.~positive parenting programmes that
+reduce reliance on physical punishment) could yield improvements in
+child mental health independently of socioeconomic conditions.
+
+Taken together, these three domains suggest that childhood depression in
+Malawi is best understood as a socially embedded condition, shaped by
+the intersection of material deprivation, caregiving quality, and
+disciplinary practices. This has important implications for how
+screening and prevention resources are allocated: rather than targeting
+individual child-level characteristics, the strongest signals point
+toward household and caregiver characteristics that are accessible
+through routine administrative and survey data.
+
+    \hypertarget{limitations}{%
+\subsection{4.6 Limitations}\label{limitations}}
+
+Several limitations of the present analysis warrant acknowledgement.
+
+\textbf{Measurement validity:} The target variable is derived from a
+caregiver's perception of how often the child seems sad or depressed,
+not from a validated clinical instrument such as the Child Depression
+Inventory or DSM-based diagnostic interview. This introduces measurement
+error in both directions: caregivers may under-report depression in
+cultures where emotional expression is stigmatised, or may conflate
+normal developmental sadness with clinical depression. Any predictive
+model trained on this proxy measure inherits its limitations.
+
+\textbf{Cross-sectional design:} The MICS survey is cross-sectional,
+meaning that predictor and outcome variables are measured at the same
+point in time. This precludes causal inference: while wealth predicts
+depression, it is equally plausible that having a depressed child
+increases household economic strain. Longitudinal cohort data would be
+necessary to establish temporal precedence.
+
+\textbf{Missing data:} Despite principled handling of missing values
+through mode imputation and structural exclusion of high-missingness
+columns, the informative missingness of several variables, particularly
+FCD5 (physical punishment, asked conditionally) and MA2 (husband's age,
+absent for unmarried mothers), is not explicitly modelled.
+
+\textbf{Generalisability:} The model is trained and evaluated on a
+single country survey. Malawi's specific socioeconomic profile, ethnic
+composition, and cultural context may limit the generalisability of the
+estimated feature importances to other LMICs, even those with comparable
+overall development indicators.
+
+    \hypertarget{recommendations-and-future-directions}{%
+\subsection{4.7 Recommendations and Future
+Directions}\label{recommendations-and-future-directions}}
+
+The consistent signals across both models yield clear evidence-based
+recommendations. For \textbf{policymakers}, household socioeconomic
+indicators, particularly wealth score and access to improved water,
+sanitation, and housing, should be incorporated into child mental health
+risk-stratification frameworks, with social protection programmes such
+as conditional cash transfers considered as potential co-benefit levers.
+For \textbf{healthcare workers}, simple maternal well-being assessments
+integrated into existing child health contact points (vaccination
+visits, growth monitoring, antenatal care) could identify high-risk
+mother--child dyads early. For \textbf{parenting programmes},
+evidence-based positive discipline interventions that reduce reliance on
+physical punishment are indicated by both the raw data patterns and the
+model importances.
+
+\textbf{Future research} should: (1) deploy a longitudinal follow-up of
+the MICS cohort to establish temporal ordering between key predictors
+and depression onset, (2) validate the binarisation threshold against
+clinically validated screening instruments in a Malawian subsample, (3)
+test external validity on MICS datasets from comparable LMICs such as
+Zimbabwe, Zambia, or Mozambique, and (4) explore ordinal regression
+models preserving the five-level response structure for finer-grained
+risk stratification.
+
+    \hypertarget{generative-ai-statement}{%
+\section{5. Generative AI Statement}\label{generative-ai-statement}}
+
+Generative AI tools were used in the following ways: (1) to assist with
+refining the narrative sections of the report, and (2) to assist in
+identifying code errors and improving code readability.
+
+    \hypertarget{references}{%
+\section{6. References}\label{references}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Pedregosa F, Varoquaux G, Gramfort A, Michel V, Thirion B, Grisel O,
+  et al.~Scikit-learn: Machine Learning in Python. \emph{J Mach Learn
+  Res}. 2011;12:2825--30. Available from:
+  http://jmlr.org/papers/v12/pedregosa11a.html
+\item
+  Patel V, Saxena S, Lund C, Thornicroft G, Baingana F, Bolton P, et
+  al.~The Lancet Commission on global mental health and sustainable
+  development. \emph{Lancet}. 2018;392(10157):1553--98.
+  doi:10.1016/S0140-6736(18)31612-X
+\item
+  Malawi National Statistical Office and UNICEF. \emph{Malawi Multiple
+  Indicator Cluster Survey 2019--2020, Survey Findings Report}.
+  Lilongwe: NSO and UNICEF; 2020. Available from:
+  https://mics.unicef.org/surveys
+\item
+  UNICEF. Multiple Indicator Cluster Surveys (MICS) {[}Internet{]}. New
+  York: UNICEF; 2024 {[}cited 2025 Mar{]}. Available from:
+  https://mics.unicef.org/
+\item
+  Gershoff ET, Grogan-Kaylor A. Spanking and child outcomes: old
+  controversies and new meta-analyses. \emph{J Fam Psychol}.
+  2016;30(4):453--69. doi:10.1037/fam0000191
+\item
+  Madley-Dowd P, Hughes R, Tilling K, Heron J. The proportion of missing
+  data should not be used to guide decisions on multiple imputation.
+  \emph{J Clin Epidemiol}. 2019;110:63--73.
+  doi:10.1016/j.jclinepi.2019.02.016
+\item
+  Marino M, Lucas J, Latour E, Heintzman JD. Missing data in primary
+  care research: importance, implications and approaches. \emph{Fam
+  Pract}. 2021;38(2):199--202. doi:10.1093/fampra/cmaa134
+\item
+  Ge G, Zhang J. Feature selection methods and predictive models in CT
+  lung cancer radiomics. \emph{J Appl Clin Med Phys}. 2023;24(1):e13869.
+  doi:10.1002/acm2.13869
+\item
+  Breiman L. Random forests. \emph{Mach Learn}. 2001;45(1):5--32.
+  doi:10.1023/A:1010933404324
+\item
+  McInnes L, Healy J, Saul N, Großberger L. UMAP: Uniform Manifold
+  Approximation and Projection. \emph{J Open Source Softw}.
+  2018;3(29):861. doi:10.21105/joss.00861
+\end{enumerate}
+
+    \begin{tcolorbox}[breakable, size=fbox, boxrule=1pt, pad at break*=1mm,colback=cellbackground, colframe=cellborder]
+\prompt{In}{incolor}{ }{\boxspacing}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c+c1}{\PYZsh{} Run the following to render to PDF}
+\PY{o}{!}jupyter\PY{+w}{ }nbconvert\PY{+w}{ }\PYZhy{}\PYZhy{}to\PY{+w}{ }latex\PY{+w}{ }B300238\PYZus{}B296110\PYZus{}MachineLearninginPython\PYZus{}ICA.ipynb
+\PY{o}{!}sed\PY{+w}{ }\PYZhy{}i\PY{+w}{ }\PY{l+s+s1}{\PYZsq{}s/\PYZbs{}\PYZbs{}usepackage\PYZob{}geometry\PYZcb{}/\PYZbs{}\PYZbs{}usepackage[margin=1in]\PYZob{}geometry\PYZcb{}/\PYZsq{}}\PY{+w}{ }B300238\PYZus{}B296110\PYZus{}MachineLearninginPython\PYZus{}ICA.tex
+\PY{o}{!}sed\PY{+w}{ }\PYZhy{}i\PY{+w}{ }\PY{l+s+s1}{\PYZsq{}s/\PYZbs{}\PYZbs{}begin\PYZob{}document\PYZcb{}/\PYZbs{}\PYZbs{}usepackage\PYZob{}fontsize\PYZcb{}\PYZbs{}n\PYZbs{}\PYZbs{}changefontsize\PYZob{}9pt\PYZcb{}\PYZbs{}n\PYZbs{}\PYZbs{}begin\PYZob{}document\PYZcb{}/\PYZsq{}}\PY{+w}{ }B300238\PYZus{}B296110\PYZus{}MachineLearninginPython\PYZus{}ICA.tex
+\PY{o}{!}xelatex\PY{+w}{ }B300238\PYZus{}B296110\PYZus{}MachineLearninginPython\PYZus{}ICA.tex
+\end{Verbatim}
+\end{tcolorbox}
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+\end{document}
